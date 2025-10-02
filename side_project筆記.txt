@@ -1,0 +1,16 @@
+新增model
+php artisan make:model Category -m
+
+新增controller
+php artisan make:controller Category
+
+下載資料表
+table.download("xlsx", "data.xlsx", {sheetName:"My Data"});
+
+
+產品資料表
+
+id
+
+
+php artisan make:model Product -m
