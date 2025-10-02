@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits ,ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 
 let filterNum = ref(1);

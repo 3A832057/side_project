@@ -52,7 +52,7 @@
 
 </template>
 <script setup>
-import { defineProps, defineEmits ,ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios, { all } from 'axios';
 import Swal from 'sweetalert2';
 import { Head, Link, useForm } from '@inertiajs/vue3';
