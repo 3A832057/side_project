@@ -257,7 +257,7 @@ box-shadow: 0 0 25px 30px rgba(112, 255, 238, 0.832);
 
                 <!-- Page Heading -->
                 <header
-                    class="bg-white shadow h-1/6"
+                    class="bg-white shadow h-18"
                     v-if="$slots.header"
                 >
                     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
