@@ -6,9 +6,10 @@ import DropdownLink from '@/Components/Back/DropdownLink.vue';
 import NavLink from '@/Components/Back/NavLink.vue';
 import ResponsiveNavLink from '@/Components/Back/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-
+import 'vue-select/dist/vue-select.css';
 const showingNavigationDropdown = ref(false);
 const showAside = ref(false);
+let isActive = ref(false);
 </script>
 <style>
 .swal2-cancel.swal2-styled {
@@ -21,16 +22,19 @@ const showAside = ref(false);
     background-color: rgb(60, 63, 255) !important;
     color: white !important;
 }
+.shadow-xxxl {
+box-shadow: 0 0 25px 30px rgba(112, 255, 238, 0.832);
+
+}
 </style>
 
 <template>
     <div>
-        <div class="min-h-screen bg-gray-100 grid grid-cols-6 ">
+        <div class="min-h-screen bg-gray-100 grid-rows-[80px_1fr] grid grid-cols-6 ">
 
             <nav
                 class="col-span-6 border-b border-gray-100 bg-white mb-1 shadow"
             >
-                <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
                         <div class="flex">
@@ -232,7 +236,8 @@ const showAside = ref(false);
                 </div>
             </nav>
 
-            <aside v-if="showAside" class="col-span-6 h-screen px-5 py-8 overflow-y-auto bg-white me-1 sm:col-span-1" >
+            <aside v-if="showAside" class=" col-span-6 h-full px-5 py-8 overflow-y-auto bg-white me-1 sm:col-span-1" >
+                
                 <a href="#">
                     <img class="w-auto h-7" src="https://merakiui.com/images/logo.svg" alt="">
                 </a>
@@ -248,11 +253,11 @@ const showAside = ref(false);
                 </div>
             </aside>
 
-            <div :class="showAside ? 'col-span-6 sm:col-span-5':'col-span-6'" >
+            <div class="h-full" :class="showAside ? 'col-span-6 sm:col-span-5':'col-span-6'" >
 
                 <!-- Page Heading -->
                 <header
-                    class="bg-white shadow"
+                    class="bg-white shadow h-1/6"
                     v-if="$slots.header"
                 >
                     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -261,12 +266,18 @@ const showAside = ref(false);
                 </header>
 
                 <!-- Page Content -->
-                <main>
+                <main class="h-5/6">
                     <slot />
                 </main>
             </div>
+            <div @click="showAside = true" @mouseover="isActive=true" @mouseleave="isActive = false" class="fixed flex items-center top-1/2 -translate-y-1/2 w-10 h-full">
+            </div>
+            <div v-if="!showAside" :class=" isActive ? ' opacity-100 ' : ' opacity-0' " class="fixed flex items-center top-1/2 -translate-x-10 -translate-y-1/2 w-10 h-full shadow-xxxl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="fixed translate-x-12 opacity-30 rounded-3xl" viewBox="0 0 640 640"><path fill="#00c0f0" d="M566.6 342.6C579.1 330.1 579.1 309.8 566.6 297.3L406.6 137.3C394.1 124.8 373.8 124.8 361.3 137.3C348.8 149.8 348.8 170.1 361.3 182.6L466.7 288L96 288C78.3 288 64 302.3 64 320C64 337.7 78.3 352 96 352L466.7 352L361.3 457.4C348.8 469.9 348.8 490.2 361.3 502.7C373.8 515.2 394.1 515.2 406.6 502.7L566.6 342.7z"/></svg>
+            </div>
 
-            
+
+
         </div>
     </div>
 </template>

@@ -6,7 +6,7 @@ import { Head } from '@inertiajs/vue3';
 <template>
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout >
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
@@ -15,16 +15,11 @@ import { Head } from '@inertiajs/vue3';
             </h2>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
-                >
-                    <div class="p-6 text-gray-900">
-                        You're logged in!
-                    </div>
-                </div>
-            </div>
+        <div class="py-4 h-full py-3 px-3 flex grid grid-cols-5 justify-items-center items-center grid-rows-[1fr,1fr]">
+            <div class="mr-1 mb-1 bg-white col-span-3 w-full shadow-xl shadow-sky-200 rounded-lg h-full"></div>
+            <div class="ml-1 mb-1 bg-white col-span-2 w-full shadow-xl shadow-sky-200 rounded-lg h-full"></div>
+            <div class="mr-1 mt-1 bg-white col-span-2 w-full shadow-xl shadow-sky-200 rounded-lg h-full"></div>
+            <div class="ml-1 mt-1 bg-white col-span-3 w-full shadow-xl shadow-sky-200 rounded-lg h-full"></div>
         </div>
     </AuthenticatedLayout>
 </template>

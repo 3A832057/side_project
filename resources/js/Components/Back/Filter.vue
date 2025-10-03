@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted ,nextTick } from 'vue'
 
 
 let filterNum = ref(1);
@@ -47,6 +47,8 @@ onMounted(async () => {
     if(filterField.value.length === 0){
         return;
     }
+    await nextTick()
+
     await search();
 
 });
@@ -58,8 +60,8 @@ async function search() {
     for (let i = 0; i < filterNum.value; i++) {
         filter.push({field: filterField.value[i], type: filterType.value[i], value: filterValue.value[i]});
     }
-    console.log(filter);
-    emit('search', filter);
+    console.log('searcg',filter)
+    await emit('search', filter);
 }
 </script>
 

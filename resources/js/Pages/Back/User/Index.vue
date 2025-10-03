@@ -46,7 +46,7 @@ import Filter from '@/Components/Back/Filter.vue';
 import Swal from 'sweetalert2';
 
 let selectField = ref([
-    {value: 'name', text: '名稱', type: 'text' ,default:'張紋嘉'},
+    {value: 'name', text: '名稱', type: 'text' ,default:'張紋嘉12'},
     {value: 'email', text: '電子郵件', type: 'text'},
     {value: 'created_at', text: '建立時間' , type: 'date'},
     {value: 'updated_at', text: '更新時間' , type: 'date'},
@@ -174,7 +174,6 @@ function closeModal() {
 }
 
 function search(filter) {
-    console.log("搜尋條件123:", filter);
     table.setFilter(filter);
 }
 
