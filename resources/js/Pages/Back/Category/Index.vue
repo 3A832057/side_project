@@ -423,6 +423,10 @@ function search(filter) {
 }
 
 async function updateName(id , new_name){
+
+
+    if (id === undefined || id === null || id ==='') return
+
     let returnData = 
         await axios.put('/api/back/category/' + id, 
             {
@@ -455,6 +459,10 @@ async function updateName(id , new_name){
 }
 
 async function updateDescription(id , new_description){
+
+    if (id === undefined || id === null || id ==='') return
+
+
     let returnData = 
         await axios.put('/api/back/category/' + id, 
             {
@@ -486,6 +494,11 @@ async function updateDescription(id , new_description){
 }
 
 async function updateParent(id , new_parent_id){
+
+
+    if (id === undefined || id === null || id ==='') return
+
+
     let returnData = 
         await axios.put('/api/back/category/' + id, 
             {
@@ -519,6 +532,10 @@ async function updateParent(id , new_parent_id){
 }
 
 async function updateEnabled(id , new_is_enabled){
+
+
+    if (id === undefined || id === null || id ==='') return
+
     let returnData = 
         await axios.put('/api/back/category/' + id, 
             {
@@ -526,6 +543,7 @@ async function updateEnabled(id , new_is_enabled){
             }
         )
 
+            
     if (returnData.data.success) {
         
         await Swal.fire({
@@ -732,8 +750,23 @@ async function insertRow(){
             }
         )
     if (returnData.data.success) {
+
+        await Swal.fire({
+                icon: 'success',
+                title: '新增成功',
+                showConfirmButton: false,
+                timer: 1500
+
+            }).then(()=>{
+                startInsertTable.value = false;
+                startInsertTableChild.value = false;
+                startInsertTableGrandChild.value = false;
+                editMode.value = false;
+            })
         await getAllCategoryList();
-        refresh();
+        await refresh();
+
+
     }
 }
 </script>
