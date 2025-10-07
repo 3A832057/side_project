@@ -4,12 +4,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Back\UserController as BackUserController;
 use App\Http\Controllers\Back\CategoryController as BackCategoryController;
-
+use App\Http\Controllers\Back\ComponentController as BackComponentController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
 Route::prefix('back')->group(function () {
+    Route::post('uploadImg',[BackComponentController::class ,'uploadImg']);
     Route::prefix('user')->group(function () {
         Route::get('/datatable', [BackUserController::class, 'getDatatable'])
             ->name('get.user.datatable');
