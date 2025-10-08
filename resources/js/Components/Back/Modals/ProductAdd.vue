@@ -62,49 +62,46 @@
         <div class="col-span-6 w-full pr-2 justify-items-center" v-if="page==2">
             <div class="grid grid-cols-6 ">
                 <div class="col-span-1">
-                    <input type="file" id="inputImage" @change="uploadImage" style="display: none;"></input>
-                    <svg class=" w-full" @click="selectImage()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
-                    <img src=""></img>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="1"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="2"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="3"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="4"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="5"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="6"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="7"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="8"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="9"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="10"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="11"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <svg class=" w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#fedfa9" d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 160C544 124.7 515.3 96 480 96L160 96zM224 176C250.5 176 272 197.5 272 224C272 250.5 250.5 272 224 272C197.5 272 176 250.5 176 224C176 197.5 197.5 176 224 176zM368 288C376.4 288 384.1 292.4 388.5 299.5L476.5 443.5C481 450.9 481.2 460.2 477 467.8C472.8 475.4 464.7 480 456 480L184 480C175.1 480 166.8 475 162.7 467.1C158.6 459.2 159.2 449.6 164.3 442.3L220.3 362.3C224.8 355.9 232.1 352.1 240 352.1C247.9 352.1 255.2 355.9 259.7 362.3L286.1 400.1L347.5 299.6C351.9 292.5 359.6 288.1 368 288.1z"/></svg>
+                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="12"></imageUpload>
                 </div>
             </div>
         </div>
         
         <!-- page 3 第三頁頁簽 -->
         <div class="col-span-6 grid grid-cols-6 w-full pl-2" v-if="page==3">
-
             <div class = "col-span-2">
                 <div class="flex items center">
                     <input class="rounded-sm border border-gray-300 w-2/3 h-8 mb-4 " placeholder='分類依據 ex:顏色' v-model="group_name[0]" type="text"></input>
@@ -154,7 +151,7 @@
         
         <!-- 按鈕 -->
         <div class = "col-span-6 h-12 flex justify-between">
-
+            <Editor/>
             <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="submit()" >
                 新增
             </button>
@@ -173,6 +170,8 @@ import { ref, onMounted } from 'vue'
 import axios, { all } from 'axios';
 import Swal from 'sweetalert2';
 import  VueSelect  from "vue-select";
+import imageUpload from '@/Components/Back/ImageUpload.vue';
+import Editor from '@/Components/Back/Editor.vue'
 
 let page = ref(1);
 const props = defineProps({
@@ -184,7 +183,7 @@ let now_address = ref([0,0]);
 let group_name = ref(['','']);
 let set_number_level1 = ref(0);
 let set_number_level2 = ref([0]);
-
+let imgSrc = ref('');
 let set_level  = ref([{
     first: 0,
     second: null,
@@ -258,27 +257,8 @@ async function submit() {
   
 }
 
-async function selectImage() {
-    
-    let fileInputButton = document.getElementById('inputImage')
-    fileInputButton.click();
-    
-}
 
-async function uploadImage(event) {
-
-    const file = event.target.files[0]; // 取得第一個上傳的檔案
-    if (!file) return;
-
-    console.log('file:',file);
-
-    let fileData ={file:file ,storeDir:'products'};
-    let finalReturn = axios.post('/api/back/uploadImg', fileData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    })
-    
-    
+function uploadSuccess(returnData){
+    console.log(returnData);
 }
 </script>

@@ -104,7 +104,6 @@ async function submit() {
             timer: 1500
         })
     }
-  
 }
 
 
