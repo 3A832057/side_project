@@ -23,42 +23,46 @@
         <div class="col-span-3 w-full pr-2" v-if="page==1">
             <div class="mb-2">
                 <label for="name" class="block text-sm/6 font-semi text-zinc-900">產品名稱 *</label>
-                <input id="name" type="text" name="name" autocomplete="given-name"  v-model="tableData.name"
+                <input id="name" type="text" name="name" autocomplete="given-name"  v-model="page1.name"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
                 <label for="product_code" class="block text-sm/6 font-semi text-zinc-900">產品代碼 *</label>
-                <input id="product_code" type="text" name="product_code" autocomplete="given-code"  v-model="tableData.email"
+                <input id="product_code" type="text" name="product_code" autocomplete="given-code"  v-model="page1.product_code"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
                 <label for="price" class="block text-sm/6 font-semi text-zinc-900">售價</label>
-                <input id="price" type="number" name="price" autocomplete="given-price"  v-model="tableData.price"
+                <input id="price" type="number" name="price" autocomplete="given-price"  v-model="page1.price"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
                 <label for="sort_order" class="block text-sm/6 font-semi text-zinc-900">排列順序 *</label>
-                <input id="sort_order" type="number" name="sort_order" autocomplete="given-sort_order"  v-model="tableData.sort_order"
+                <input id="sort_order" type="number" name="sort_order" autocomplete="given-sort_order"  v-model="page1.sort_order"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             
         </div>
 
         <div class="col-span-3 w-full pl-2" v-if="page==1">
-            <div class="mb-2" v-for="value in category_number">
+            <div class="mb-2" v-for="(catego, idx) in categories" :key="idx">
                 <label for="password" class="block text-sm/6 font-semi text-zinc-900">產品類別</label>
-                <VueSelect v-model="category[value-1]" :options="['Canada321', 'United States','123','321','321321']" ></VueSelect>
+                <VueSelect
+                    v-model="categories[idx]"
+                    :options="categories_list"
+                    label="display"
+                    :reduce="reduceToId"
+                ></VueSelect>
             </div>
-            <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="category_number++" >
+            <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="categories.push(null)" >
                 新增類別
             </button>
-            <button class="bg-gray-300 text-white rounded-md px-7 py-1 mr-1" v-if="category_number > 1" @click="category_number--" >
+            <button class="bg-gray-300 text-white rounded-md px-7 py-1 mr-1" v-if="categories.length > 1" @click="categories.pop()" >
                 刪除類別
             </button>
         </div>
 
         <!-- page 2 第二頁頁簽 --> 
-        
         <div class="col-span-6 w-full pr-2 justify-items-center" v-if="page==2">
             <div class="grid grid-cols-6 ">
                 <div class="col-span-1">
@@ -139,23 +143,29 @@
                 </div>
                 <div v-for="set in set_material" >
                     <div class="w-full mb-3" v-if="set.first==now_address[0] && set.second == now_address[1]">
-                        <VueSelect v-model="set.data" :options="['Canada321', 'United States','123','321','321321']" ></VueSelect>
+                        <VueSelect
+                            v-model="set.data"
+                            :options="materials_list"
+                            label="display"
+                            :reduce="reduceToId"
+                        ></VueSelect>
                     </div>
                 </div>
             </div>
 
-            
         </div>
 
-	    	
-        
+        <!-- page 4 第四頁頁簽 -->
+        <div class="col-span-6 w-full pr-2" v-if="page==4" >
+            <Editor v-model:content="description"  />
+        </div>
+
         <!-- 按鈕 -->
-        <div class = "col-span-6 h-12 flex justify-between">
-            <Editor/>
-            <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="submit()" >
+        <div class = "col-span-6 h-12 flex justify-end gap-2">
+            <button class="bg-blue-600 text-white rounded-md px-7 py-1" @click="submit()" >
                 新增
             </button>
-            <button class="bg-gray-200 text-white rounded-md px-7 py-1 ml-1" @click="close()"  >
+            <button class="bg-gray-200 text-white rounded-md px-7 py-1" @click="close()"  >
                 取消
             </button>
         </div>
@@ -177,13 +187,21 @@ let page = ref(1);
 const props = defineProps({
     data: Object,
 })
-let img = ref(null);
+let page1 = ref({
+    name: '',
+    product_code: '',
+    price: 0,
+    sort_order: 0,
+});
+
+let categories = ref([null]);
+let categories_list = ref([]);
+let materials_list = ref([]);
 let description = ref('');
-let now_address = ref([0,0]);
+let now_address = ref([0,null]);
 let group_name = ref(['','']);
 let set_number_level1 = ref(0);
 let set_number_level2 = ref([0]);
-let imgSrc = ref('');
 let set_level  = ref([{
     first: 0,
     second: null,
@@ -197,30 +215,100 @@ let set_material= ref([{
 }])
 
 let group_number = ref(1); 
-const tableData = ref({
-    name: '',
-    email: '',
-    password: '',
-    password_confirm: '',
-});
 const emit = defineEmits(['close'])
 
-onMounted(() => {
-    if (props.data) {
-        tableData.value = { ...props.data };
-    } else {
-        tableData.value = {
-            name: '',
-            email: '',
-        };
-    }
+onMounted(async () => {
+    await getCategoriesList();
+    await getMaterialList();
 });
+
+// 將 option 物件轉成要放入 v-model 的值（只要 id）
+const reduceToId = (option) => option ? option.id : null;
+
+// 組合層級顯示字串：Parent > Child > ...
+const buildDisplay = (option) => {
+    if (!option) return '';
+    const names = [];
+    let cur = option;
+
+    // 只要 有 parent 物件，就沿著 parent 往上串
+    while (cur) {
+        
+        if (cur.name) names.unshift(cur.name);
+
+        //移到下一個parent
+        cur = cur.parent;
+    }
+    return names.join(' > ');
+};
 
 function close() {
     console.log("關閉")
     emit('close')
 }
 
+async function getCategoriesList(){
+    let returnData = 
+    await axios.get('/api/back/category/getAllWithEnabled' , 
+        {
+            params: {
+                is_enabled: 1
+            }
+        }
+    )
+
+    if (returnData.data.success) {
+        // 為每個 option 預先計算 display（層級顯示字串），再賦值
+        categories_list.value = returnData.data.data.map(item => ({
+            ...item,
+            display: buildDisplay(item)
+        }));
+
+    } else {
+        console.error(returnData.data.message)
+        await Swal.fire({
+            icon:'error',
+            title:'取得類別失敗',
+            text: returnData.data.message,
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
+}
+
+async function getMaterialList(){
+    let returnData = 
+    await axios.get('/api/back/material/getAllWithEnabled' , 
+        {
+            params: {
+                is_enabled: 1
+            }
+        }
+    )
+
+    if (returnData.data.success) {
+        materials_list.value = returnData.data.data.map(item => ({
+            ...item,
+            display: buildDisplayMaterial(item)
+        }));
+
+    } else {
+        console.error(returnData.data.message)
+        await Swal.fire({
+            icon:'error',
+            title:'取得類別失敗',
+            text: returnData.data.message,
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
+}
+
+function buildDisplayMaterial(option) {
+    if (!option) return '';
+    
+    return option.name+' ('+option.material_code+')';
+};
 
 async function submit() {
 
@@ -256,6 +344,7 @@ async function submit() {
     }
   
 }
+
 
 
 function uploadSuccess(returnData){

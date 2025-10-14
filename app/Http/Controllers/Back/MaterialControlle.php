@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 
 use App\Http\Resources\Back\CategoryResource;
-use App\Services\Back\CategoryService;
+use App\Services\Back\MaterialService;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class MaterialControlle extends Controller
 {
-    protected CategoryService $categoryService;
+    protected MaterialService $materialService;
 
-    public function __construct(CategoryService $categoryService)
+    public function __construct(MaterialService $materialService)
     {
-        $this->categoryService = $categoryService;
+        $this->materialService = $materialService;
     }
 
     public function get(Request $request){
@@ -46,23 +46,6 @@ class CategoryController extends Controller
 
     }
 
-    //找子類別資料表
-    public function getChildDatatable(Request $request):array{
-
-        $parents = $request->parent;
-        $tableData = $this->categoryService->getDatatableWithparent_id($parents);
-        return CategoryResource::collection($tableData)->response()->getData(true) ;
-
-    }
-
-    //找特定階層資料表
-    public function getDatatableWithLevel($level):array{
-
-        $tableData = $this->categoryService->getDatatable($level);
-        return CategoryResource::collection($tableData)->response()->getData(true);
-
-    }
-
     // 更新類別資料
     public function update($id, Request $request){
 
@@ -86,54 +69,6 @@ class CategoryController extends Controller
 
     }
 
-    // 更新類別前端顯示順序
-    public function setSort_order(Request $request){
-
-        try {
-            $data = $this->categoryService->setSort_order($request->all());
-
-            return response()->json([
-                'success' => $data['success'],
-                'message' => '更新成功!',
-                'data' => null,
-            ]);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => '伺服器錯誤：' . $e->getMessage(),
-                'data' => null,
-            ], 500);
-        }
-
-
-    }
-    //取得父類別清單
-    public function getParentList($level){
-
-        try {
-
-           $params = [
-                'level' => $level,
-            ];
-            $tableData = $this->categoryService->get($params);
-            $newData = [];
-            foreach($tableData['data'] as $key => $item){
-                $newData['data'][$key]['label'] = $item['name'];
-                $newData['data'][$key]['value'] = $item['id'];
-            }
-            return $newData['data'];
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => '伺服器錯誤：' . $e->getMessage(),
-                'data' => null,
-            ], 500);
-        }
-
-        
-    }
     public function store(Request $request){
         try {
 
@@ -158,7 +93,7 @@ class CategoryController extends Controller
         try {
 
             $params = $request->all();
-            $categoriesData = $this->categoryService->get($params);
+            $categoriesData = $this->materialService->get($params);
 
             return response()->json([
                 'success' => $categoriesData['success'],

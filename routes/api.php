@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Back\UserController as BackUserController;
 use App\Http\Controllers\Back\CategoryController as BackCategoryController;
+use App\Http\Controllers\Back\MaterialControlle as BackMaterialController;
 use App\Http\Controllers\Back\ComponentController as BackComponentController;
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -31,9 +32,12 @@ Route::prefix('back')->group(function () {
         Route::put('{id}', [BackCategoryController::class,'update'])
             ->name('put.category.update');
         Route::get('/parentList/{level}', [BackCategoryController::class,'getParentList'])
-            ->name('post.category.parentList');
+            ->name('get.category.parentList');
+        Route::get('/getAllWithEnabled', [BackCategoryController::class,'getAllWithEnabled'])
+            ->name('get.category.getAllWithEnabled');
         Route::get('/', [BackCategoryController::class,'get'])
             ->name('get.category.all');
+            
         Route::post('/', [BackCategoryController::class,'store'])
             ->name('post.category.store');
     });
@@ -44,5 +48,17 @@ Route::prefix('back')->group(function () {
             ->name('get.product.find');
         Route::put('{id}', [\App\Http\Controllers\Back\ProductController::class,'update'])
             ->name('put.product.update');
+    });
+    Route::prefix('material')->group(function () {
+        Route::get('/datatable/{level}', [BackMaterialController::class, 'getDatatableWithLevel'])
+            ->name('get.material.datatable');
+        Route::put('{id}', [BackMaterialController::class,'update'])
+            ->name('put.material.update');
+        Route::get('/getAllWithEnabled', [BackMaterialController::class,'getAllWithEnabled'])
+            ->name('get.material.getAllWithEnabled');
+        Route::get('/', [BackMaterialController::class,'get'])
+            ->name('get.material.all');
+        Route::post('/', [BackMaterialController::class,'store'])
+            ->name('post.material.store');
     });
 });

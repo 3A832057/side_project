@@ -142,10 +142,14 @@ class CategoryService
     public function get($params)
     {
         $query = Category::query()
-            ->select(['id', 'name', 'parent_id', 'description','level', 'sort_order', 'is_enabled','created_at', 'updated_at']);
+            ->select(['id', 'name', 'parent_id', 'description','level', 'sort_order', 'is_enabled','created_at', 'updated_at'])
+            ->with('parent')->with('parent.parent');
 
         if (isset($params['level'])) {
-            $query->where('level', $params['level']);
+            $query->where('categories.level', $params['level']);
+        }
+        if (isset($params['is_enabled'])) {
+            $query->where('categories.is_enabled', $params['is_enabled']);
         }
 
         return [
