@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
-use App\Services\Back\ProductService;
-use Illuminate\Http\Request;
-use App\Http\Resources\Back\ProductResource;
-use Illuminate\Support\Facades\DB;
+use App\Services\Back\ProductImageService;
+
 class ProductImageController extends Controller
 {
     

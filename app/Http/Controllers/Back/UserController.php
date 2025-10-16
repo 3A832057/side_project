@@ -5,15 +5,17 @@ use App\Http\Controllers\Controller;
 use App\Services\Back\UserService;
 use Illuminate\Http\Request;
 use App\Http\Resources\Back\UserResource;
-
+use App\Services\Back\ComponentService;
 class UserController extends Controller
 {
     
     protected UserService $userService;
+    protected ComponentService $componentService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, ComponentService $componentService)
     {
         $this->userService = $userService;
+        $this->componentService = $componentService;
     }
 
     //找會員資料表
@@ -21,7 +23,6 @@ class UserController extends Controller
 
         $data = $request->all();
 
-        // dd($data);
         $tableData = $this->userService->getDatatable($data);
         return UserResource::collection($tableData)->response()->getData(true);
 
@@ -54,8 +55,10 @@ class UserController extends Controller
 
         try {
 
+            $beforeData = $this->userService->find($id);
             $userData = $this->userService->update($id , $request->all());
 
+            $this->componentService->writeAdminLog('update', 'users', $beforeData, $userData['data']);
             return response()->json([
                 'success' => $userData['success'],
                 'message' => $userData['message'],

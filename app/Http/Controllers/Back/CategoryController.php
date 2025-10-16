@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 
+use App\Services\Back\ComponentService;
 use App\Http\Resources\Back\CategoryResource;
 use App\Services\Back\CategoryService;
 use Illuminate\Http\Request;
@@ -10,10 +11,12 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     protected CategoryService $categoryService;
+    protected ComponentService $componentService;
 
-    public function __construct(CategoryService $categoryService)
+    public function __construct(CategoryService $categoryService, ComponentService $componentService)
     {
         $this->categoryService = $categoryService;
+        $this->componentService = $componentService;
     }
 
     public function get(Request $request){
@@ -67,8 +70,11 @@ class CategoryController extends Controller
     public function update($id, Request $request){
 
         try {
+            $beforeData = $this->categoryService->find($id);
 
             $userData = $this->categoryService->update($id , $request->all());
+
+            $this->componentService->writeAdminLog('update', 'categories', $beforeData['data'], $userData['data']);
 
             return response()->json([
                 'success' => $userData['success'],
@@ -90,7 +96,10 @@ class CategoryController extends Controller
     public function setSort_order(Request $request){
 
         try {
+            $beforeData = $this->categoryService->get(null);
             $data = $this->categoryService->setSort_order($request->all());
+
+            $this->componentService->writeAdminLog('update', 'categories', $beforeData['data'], $data['data']);
 
             return response()->json([
                 'success' => $data['success'],
@@ -137,11 +146,15 @@ class CategoryController extends Controller
     public function store(Request $request){
         try {
 
+
             $data = $this->categoryService->store($request->all());
+
+            $this->componentService->writeAdminLog('create', 'categories', $request->all(), $data['data']);
+            
             return response()->json([
                 'success' => $data['success'],
                 'message' => $data['message'],
-                'data' => null,
+                'data' => $data['data'],
             ]);
 
         } catch (\Throwable $e) {

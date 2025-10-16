@@ -32,25 +32,25 @@ class CategoryService
             ->get() ?? null;
     }
 
-    // 找單一會員資料
-    // public function find($id)
-    // {
+    // 找單一資料
+    public function find($id)
+    {
 
-    //     $user = User::find($id);
+        $category = Category::find($id);
 
-    //     if (!$user) 
-    //         return [
-    //             'success' => false,
-    //             'message' => '使用者不存在',
-    //             'data' => null,
-    //         ];
+        if (!$category) 
+            return [
+                'success' => false,
+                'message' => '類別不存在',
+                'data' => null,
+            ];
 
-    //     return [
-    //             'success' => false,
-    //             'message' => '使用者不存在',
-    //             'data' => $user,
-    //         ];
-    // }
+        return [
+                'success' => false,
+                'message' => '使用者不存在',
+                'data' => $category,
+            ];
+    }
 
     // 更新類別資料
     public function update($id , $data)
@@ -123,10 +123,11 @@ class CategoryService
                 }
             }
             DB::commit();
+            $data = DB::table('categories')->orderBy('sort_order')->get();
             return [
                 'success' => true,
                 'message' => '排序更新成功!',
-                'data' => null
+                'data' => $data
             ];
         } catch (\Exception $e) {
             DB::rollBack();

@@ -4,20 +4,19 @@ namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
 use App\MixService\Back\ProductMixService;
 use App\Services\Back\ProductService;
-use Carbon\Traits\ToStringFormat;
+use App\Services\Back\ComponentService;
 use Illuminate\Http\Request;
 use App\Http\Resources\Back\ProductResource;
-use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
-    
+    protected ComponentService $componentService;
     protected ProductService $productService;
     protected ProductMixService $productMixService;
-
-    public function __construct(ProductService $productService, ProductMixService $productMixService)
+    public function __construct(ProductService $productService, ProductMixService $productMixService, ComponentService $componentService)
     {
         $this->productService = $productService;
         $this->productMixService = $productMixService;
+        $this->componentService = $componentService;
     }
 
     //找產品資料表
@@ -128,6 +127,7 @@ class ProductController extends Controller
 
             $productMain = $this->productMixService->store($product);
 
+            $this->componentService->writeAdminLog('create', 'products', null, $productMain['data']);
             return response()->json([
                 'success' => $productMain['success'],
                 'message' => $productMain['message'],

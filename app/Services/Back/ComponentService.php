@@ -2,7 +2,7 @@
 
 namespace App\Services\Back;
 
-use App\Models\User;
+use App\Models\Admin_log;
 use Illuminate\Support\Facades\Auth;
 
 class ComponentService
@@ -18,10 +18,11 @@ class ComponentService
         ];
     }
     //寫管理員log
-    public function writeAdminLog($action , $beforeDetails, $afterDetails)
+    public function writeAdminLog($action , $mainDataTableName, $beforeDetails, $afterDetails)
     {
         $log = [
             'action' => $action,
+            'mainDataTableName' => $mainDataTableName,
             'user_id' => Auth::id(),
             'user_account' => Auth::user()->account ?? '未知使用者',
             'before' => $beforeDetails,
@@ -29,7 +30,7 @@ class ComponentService
             'created_at' => now(),
         ];
         
-        return $log;
+        Admin_log::create($log);
     }
 
 }

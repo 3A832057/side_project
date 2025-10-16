@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
+        
         Schema::create('admin_logs', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('action');
+            $table->string('mainDataTableName')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->string('user_account');
+            $table->text('before')->nullable();
+            $table->text('after')->nullable();
+            $table->timestamp('created_at')->nullable();
         });
     }
 
