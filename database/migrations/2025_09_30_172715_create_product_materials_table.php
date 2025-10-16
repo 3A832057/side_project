@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('product_materials', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id')->comment('主產品id');
-            $table->integer('material')->comment('產品材料id');
-            $table->integer('price')->comment('總定價');
+            $table->integer('material_id')->comment('產品材料id');
             $table->integer('sort_order')->default(0)->comment('排列順序');
- 
             $table->boolean('is_hidden')->default(false)->comment('當作刪除使用');
             $table->timestamp('hidden_at')->nullable()->comment('刪除時間');
             $table->timestamps();

@@ -30,7 +30,7 @@
             </div>
         </div>
     </AuthenticatedLayout>
-    <UserUpdate v-if="show" :data="updateData" @close="closeModal"  />
+    <ProductUpdate v-if="show" :data="productData" @close="closeModal"  />
     <ProductAdd v-if="showAdd" @close="closeModal" />
 
 </template>
@@ -45,6 +45,7 @@ import 'tabulator-tables/dist/css/tabulator_semanticui.min.css';
 import { onMounted, ref , nextTick } from 'vue';
 import Filter from '@/Components/Back/Filter.vue';  
 import Swal from 'sweetalert2';
+import ProductUpdate from '@/Components/Back/Modals/ProductUpdate.vue';
 
 let selectField = ref([
     {value: 'name', text: '名稱', type: 'text'},
@@ -62,12 +63,10 @@ const selectedCount = ref(0);
 const selectedElements = ref([]);
 const show = ref(false);
 const showAdd = ref(false);
-let updateData = ref({
-    name: '',
-    email: '',
+let productData = ref({
+    id: null ,
 });
 let mounted = ref(false);
-let selectedRowIndex = ref([]);
 onMounted(async () => {
     
     await nextTick()
@@ -77,15 +76,36 @@ onMounted(async () => {
     ajaxResponse: function(url, params, response){
         return response.data;
     },
-    responsiveLayout:"collapse",
+    pagination:"local",
+    renderHorizontal:"virtual",
     deselectRow:true,
+    paginationSize:5,
+    paginationSizeSelector:[20, 50, 100, 1000],
     rowHeader:{formatter:"rowSelection", titleFormatter:"rowSelection", headerSort:false, resizable: false, frozen:true, headerHozAlign:"center", hozAlign:"center"},
     columns:[
                 { title: '產品名稱', field: 'name' },
                 { title: '產品編碼', field: 'product_code' },
                 { title: '建立時間', field: 'created_at'},
                 { title: '更新時間', field: 'updated_at' ,hozAlign:"center"},
-                
+                {
+                    title: "操作",
+                    field: "actions",
+                    hozAlign: "left",
+                    formatter: function (cell) {
+                        let action_input = '';
+                        
+                        action_input += "<button class='edit-btn bg-yellow-300  pt-1 pb-1 ps-2 pe-2  rounded-lg hover:bg-yellow-400 hover:text-white'><svg class='w-4 h-4 inline align-middle mr-1' xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 1025 1023\"><path fill=\"currentColor\" d=\"M896.428 1023h-768q-53 0-90.5-37.5T.428 895V127q0-53 37.5-90t90.5-37h576l-128 127h-384q-27 0-45.5 19t-18.5 45v640q0 27 19 45.5t45 18.5h640q27 0 45.5-18.5t18.5-45.5V447l128-128v576q0 53-37.5 90.5t-90.5 37.5zm-576-464l144 144l-208 64zm208 96l-160-159l479-480q17-16 40.5-16t40.5 16l79 80q16 16 16.5 39.5t-16.5 40.5z\"/></svg>編輯</button>";
+                        
+                        return action_input;
+                    },
+                    cellClick: function (e, cell) {
+                            let rowData = cell.getRow().getData();
+                            if (e.target.classList.contains("edit-btn")) {
+                                show.value = true;
+                                productData.value.id = rowData.id;
+                        }
+                    },
+                }
             ],
             rowFormatter:function(row){
                 var element = row.getElement(),
@@ -93,15 +113,18 @@ onMounted(async () => {
                 width = element.offsetWidth,
                 rowTable, cellContents;
                 let rowTabletr;
-                
-                // while(element.firstChild) element.removeChild(element.firstChild);
 
+                try {
+                    const prev = element.querySelectorAll('.expanded-row');
+                    prev.forEach(n => n.remove());
+                } catch (e) {
+                }
 
-                let ok = selectedElements.value.findIndex(item => item === data.id);
-
-                if(ok == -1) return;
+                let expanded = (data._expanded === true) || (selectedElements.value.findIndex(item => item === data.id) !== -1);
+                if (!expanded) return;
 
                 rowTable = document.createElement("table")
+                rowTable.className = 'expanded-row';
                 rowTable.style.width = (width - 18) + "px";
 
                 rowTabletr = document.createElement("tr");
@@ -122,14 +145,14 @@ onMounted(async () => {
 
         let id = row.getData().id;
         let ok = selectedElements.value.findIndex(item => item === id);
-        if(ok == -1) {
+        if(ok === -1) {
             selectedElements.value.push(id);
-            table.replaceData();
+            row.update({ _expanded: true });
             return;
         }
 
-        selectedElements.value.splice(ok);
-        table.replaceData();
+        selectedElements.value.splice(ok, 1);
+        row.update({ _expanded: false });
         
     });
         mounted.value = true;
@@ -141,6 +164,14 @@ onMounted(async () => {
 function closeModal() {
     show.value = false;
     showAdd.value = false;
+    if ( productData.value.id) {
+        const row = table.getRow(productData.value.id);
+        if (row) {
+            table.replaceData();
+
+            return;
+        }
+    }
     table.replaceData(); 
 }
 
@@ -165,7 +196,12 @@ async function updateEnabled(id , new_is_enabled){
             showConfirmButton: false,
             timer: 1500
         }).then(()=>{
-            table.replaceData(); 
+            const row = table.getRow(productData.value.id);
+            if (row) {
+                row.update({});
+            } else {
+                table.replaceData();
+            }
         })
 
     } else {

@@ -46,6 +46,12 @@ Route::prefix('back')->group(function () {
             ->name('get.product.datatable');
         Route::get('find/{id}', [\App\Http\Controllers\Back\ProductController::class,'find'])
             ->name('get.product.find');
+        Route::post('/', [\App\Http\Controllers\Back\ProductController::class,'store'])
+            ->name('post.product.store');
+        Route::put('/{id}', [\App\Http\Controllers\Back\ProductController::class,'update'])
+            ->name('put.product.update');
+        Route::put('/edit/{id}', [\App\Http\Controllers\Back\ProductController::class,'updateAll'])
+            ->name('put.product.updateAll');
         Route::put('{id}', [\App\Http\Controllers\Back\ProductController::class,'update'])
             ->name('put.product.update');
     });

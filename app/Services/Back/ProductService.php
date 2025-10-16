@@ -19,23 +19,30 @@ class ProductService
     public function find($id)
     {
 
-        $product = Product::find($id);
+        // 使用 eager-loading 在查詢階段載入需要的關聯
+        $product = Product::with([
+            'categories',
+            'images',
+            'sets.materials',
+            'groups',
+        ])->find($id);
 
-        if (!$product) 
+        if (!$product) {
             return [
                 'success' => false,
                 'message' => '產品不存在',
                 'data' => null,
             ];
+        }
 
         return [
-                'success' => false,
-                'message' => '產品不存在',
-                'data' => $product,
-            ];
+            'success' => true,
+            'message' => '取得成功',
+            'data' => $product,
+        ];
     }
 
-    // 更新產品資料
+    // 更新產品主檔資料
     public function update($id , $data)
     {
 
@@ -55,24 +62,62 @@ class ProductService
             $updateData['name'] = $data['name'];
         }
 
-        if (isset($data['email'])) {
-            $updateData['email'] = $data['email'];
+        if (isset($data['product_code'])) {
+            $updateData['product_code'] = $data['product_code'];
         }
 
-        if (isset($data['role_id'])) {
-            $updateData['role_id'] = $data['role_id'];
+        if (isset($data['description'])) {
+            $updateData['description'] = $data['description'];
         }
 
         if (isset($data['is_enabled'])) {
             $updateData['is_enabled'] = $data['is_enabled'];
-            $updateData['disabled_at'] = $data['is_enabled'] ? null : now();
         }
+
+        if (isset($data['sort_order'])) {
+            $updateData['sort_order'] = $data['sort_order'];
+        }
+
+        if (isset($data['is_hidden'])) {
+            $updateData['is_hidden'] = $data['is_hidden'];
+        }
+
+        if (isset($data['hidden_at'])) {
+            $updateData['hidden_at'] = $data['hidden_at'];
+        }
+
+        if (isset($data['price'])) {
+            $updateData['price'] = $data['price'];
+        }
+        
+      
         $product->update($updateData);
+
+        $product = Product::with([
+            'categories',
+            'images',
+            'sets.materials',
+            'groups',
+        ])->find($id);
+        
         return [
                 'success' => true, 
                 'message' => '更新成功!',
                 'data' => $product
         ];
     }
+
+    //新增產品主表
+    public function store($data){
+
+        $product = $data['product'];
+        $query = Product::create($product);
+        return [
+                'success' => true,
+                'message' => '新增資料成功!',
+                'data' => $query
+            ];
+    }
+
     
 }

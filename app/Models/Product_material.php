@@ -6,5 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product_material extends Model
 {
-    //
+    
+    protected $fillable = [
+        'product_id',
+        'material_id',
+        'sort_order',
+        'is_hidden',
+        'hidden_at',
+    ];
+    public function set()
+    {
+        return $this->belongsTo(Product_set::class, 'set_id', 'id');
+    }
+    public function material()
+    {
+        return $this->belongsTo(Material::class, 'material_id', 'id');
+    }
 }

@@ -7,7 +7,7 @@
         <div class="col-span-6 w-full mb-1">
             <div class="w-full flex pt-1 mb-5">
                 <h2 class="text-zinc-900 text-2xl font-semibold">
-                    產品新增
+                    產品修改
                 </h2>
             </div>
             <div class="w-full flex">
@@ -66,40 +66,40 @@
         <div class="col-span-6 w-full pr-2 justify-items-center" v-if="page==2">
             <div class="grid grid-cols-6 ">
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="0"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[0]" :dir="'products'" :id="0"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="1"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[1]" :dir="'products'" :id="1"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="2"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[2]" :dir="'products'" :id="2"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="3"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[3]" :dir="'products'" :id="3"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="4"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[4]" :dir="'products'" :id="4"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="5"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[5]" :dir="'products'" :id="5"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="6"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[6]" :dir="'products'" :id="6"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="7"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[7]" :dir="'products'" :id="7"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="8"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[8]" :dir="'products'" :id="8"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="9"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[9]" :dir="'products'" :id="9"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="10"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[10]" :dir="'products'" :id="10"></imageUpload>
                 </div>
                 <div class="col-span-1">
-                    <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="11"></imageUpload>
+                    <imageUpload @uploadSuccess = uploadSuccess :imgSrc="images[11]" :dir="'products'" :id="11"></imageUpload>
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
                     <input class="rounded-sm border border-gray-300 w-2/3 h-8 mb-4 " placeholder='分類依據 ex:顏色' v-model="group_name[0]" type="text"></input>
                     <button v-if="group_number==1" class="bg-gray-600 h-8 w-1/3 text-white rounded-md px-7 py-1 mr-1 " @click="group_number++" type="text">新增子類別</button>
                 </div>
-                <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="set_number_level1++ ; sets.push({first:set_number_level1,second:null,data:null});set_number_level2.push(0)">+新增群組</button>
+                <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="sets.push({first:set_number_level1,second:null,data:null});set_number_level1 ++ ; set_number_level2.push(0);console.log('sets:',sets)">+新增群組</button>
                 <div v-for="set in sets" >
                     <div class="w-full" v-if="set.second == null">
                         <div class="block text-sm/6 font-semi text-zinc-900">{{ set.first+1 }}</div>
@@ -150,10 +150,10 @@
                 <div v-for="set in set_material" >
                     <div class="w-full mb-3" v-if="set.first==now_address[0] && set.second == now_address[1]">
                         <VueSelect
-                            v-model="set.data"
+                            :model-value="materials_list.find(o => o.id == set.data) || null"
                             :options="materials_list"
                             label="display"
-                            :reduce="reduceToId"
+                            @update:modelValue="val => set.data = val ? val.id : null"
                         ></VueSelect>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
         <!-- 按鈕 -->
         <div class = "col-span-6 h-12 flex justify-end gap-2">
             <button class="bg-blue-600 text-white rounded-md px-7 py-1" @click="submit()" >
-                新增
+                修改
             </button>
             <button class="bg-gray-200 text-white rounded-md px-7 py-1" @click="close()"  >
                 取消
@@ -207,19 +207,10 @@ let description = ref('');
 let now_address = ref([0,null]);
 let group_name = ref(['','']);
 let set_number_level1 = ref(0);
-let set_number_level2 = ref([0]);
-let sets  = ref([{
-    first: 0,
-    second: null,
-    data:'',
-    price: null,
-}])
-let image = ref(['','','','','','','','','','','','']);
-let set_material= ref([{
-    first: 0,
-    second: null,
-    data:''
-}])
+let set_number_level2 = ref([]);
+let sets  = ref([]);
+let images = ref(['','','','','','','','','','','','']);
+let set_material= ref([])
 
 let group_number = ref(1); 
 const emit = defineEmits(['close'])
@@ -227,6 +218,8 @@ const emit = defineEmits(['close'])
 onMounted(async () => {
     await getCategoriesList();
     await getMaterialList();
+    await findProduct();
+
 });
 
 // 將 option 物件轉成要放入 v-model 的值（只要 id）
@@ -252,6 +245,86 @@ const buildDisplay = (option) => {
 function close() {
     console.log("關閉")
     emit('close')
+}
+
+async function findProduct(){
+    let returnData = 
+    await axios.get(`/api/back/product/find/${props.data.id}`)
+    if (returnData.data.success) {
+        let data = returnData.data.data;
+        page1.value.name = data.name;
+        page1.value.product_code = data.product_code;
+        page1.value.price = data.price;
+        page1.value.sort_order = data.sort_order;
+        description.value = data.description;
+
+        //處理類別
+        categories.value = data.categories.map(item => item.id);
+
+        //處理圖片
+        data.images.forEach((img, index) => {
+            if(index < 12) images.value[index] = img.url;
+        });
+
+        //處理材料設定
+        if(data.sets){
+            if(data.groups.length > 0){
+                group_number.value = data.groups.length;
+                group_name.value[0] = data.groups[0].name;
+                if(data.groups[1]) group_name.value[1] = data.groups[1].name;
+            }
+
+            let temp_sets_parent = [{id: null, first: null}];
+
+            data.sets.forEach(set => {
+                if(set.level == 1){
+                    sets.value.push({
+                        first: set_number_level1.value,
+                        second: null,
+                        data: set.name,
+                        price: set.price,
+                    });
+
+                    temp_sets_parent.push({id: set.id, first: set_number_level1.value ,second: null});
+                    set_number_level1.value++;
+                    set_number_level2.value.push(0);
+                } else if (set.level == 2){
+                    sets.value.push({
+                        first: temp_sets_parent.find(s => s.id == set.parent_id && s.second == null).first,
+                        second: set_number_level2.value[temp_sets_parent.find(s => s.id == set.parent_id && s.second == null).first],
+                        data: set.name,
+                        price: set.price,
+                    });
+
+                    temp_sets_parent.push({id: set.id, first: temp_sets_parent.find(s => s.id == set.parent_id && s.second == null).first, second: set_number_level2.value[temp_sets_parent.find(s => s.id == set.parent_id && s.second == null).first]});
+                    set_number_level2.value[temp_sets_parent.find(s => s.id == set.parent_id ).first]++;
+                }
+
+                set.materials.forEach(mat => {
+                    temp_sets_parent.forEach(item => {
+                       if(item.id == mat.set_id)
+                           set_material.value.push({
+                               first: item.first ,
+                               second: item.second, 
+                               data: mat.material_id,
+                           });
+                    });
+                });
+                console.log("set_material_list:", materials_list.value);
+            });
+        }
+                console.log("sets:", sets.value);
+
+    } else {
+        console.error(returnData.data.message)
+        await Swal.fire({
+            icon:'error',
+            title:'取得產品失敗',
+            text: returnData.data.message,
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
 }
 
 async function getCategoriesList(){
@@ -323,7 +396,7 @@ async function submit() {
         set_material.value = set_material.value.filter(item => item.second != null);
     }
     let returnData = 
-        await axios.post('/api/back/product',  
+        await axios.put('/api/back/product/edit/' + props.data.id,  
             {
                 product: {
                     name: page1.value.name,
@@ -333,7 +406,7 @@ async function submit() {
                     description: description.value,
                 },
                 categories: categories.value,
-                images: image.value,
+                images: images.value,
                 set:{
                     group_number: group_number.value,
                     group_name: group_name.value,
@@ -370,6 +443,6 @@ async function submit() {
 
 
 function uploadSuccess(returnData){
-    image.value[returnData.id] = returnData.imgSrc;
+    images.value[returnData.id] = returnData.imgSrc;
 }
 </script>
