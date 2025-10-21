@@ -7,6 +7,7 @@ use App\Services\Back\ProductService;
 use App\Services\Back\ProductSetService;
 use App\Services\Back\ProductMaterialService;
 use App\Services\Back\ProductGroupService;
+use App\Services\Back\ComponentService;
 use App\Models\Product;
 use DB;
 
@@ -18,16 +19,19 @@ class ProductMixService
     protected ProductMaterialService $productMaterialService;
     protected ProductGroupService $productGroupService;
 
-    public function __construct(ProductService $productService, ProductImageService $productImageService, ProductSetService $productSetService , ProductMaterialService $productMaterialService, ProductGroupService $productGroupService)
+    protected ComponentService $componentService;
+    public function __construct(ProductService $productService, ProductImageService $productImageService, ProductSetService $productSetService , ProductMaterialService $productMaterialService, ProductGroupService $productGroupService , ComponentService $componentService)
     {
         $this->productService = $productService;
         $this->productImageService = $productImageService;
         $this->productSetService = $productSetService;
         $this->productMaterialService = $productMaterialService;
         $this->productGroupService = $productGroupService;
+        $this->componentService = $componentService;
     }
     public function store($product){
 
+        $beforeData = null;
         $success = true;
 
         DB::beginTransaction();
@@ -83,6 +87,9 @@ class ProductMixService
         if($success) DB::commit();
         else DB::rollBack();
         
+        $afterData = $this->productService->find($productMain['data']->id);
+        $this->componentService->writeAdminLog('create', 'products', null, $afterData);
+
         return [
             'success' => $success,
             'message' => $productMain['message'],
@@ -92,9 +99,8 @@ class ProductMixService
 
     public function update($id, $product){
 
+        $beforeData = $this->productService->find($id);
         $success = true;
-
-        
         DB::beginTransaction();
         if($success) $successData = $this->productService->update($id, $product['product']);
         $success = $successData['success'];
@@ -158,7 +164,9 @@ class ProductMixService
 
         if($success) DB::commit();
         else DB::rollBack();
-        
+
+        $afterData = $this->productService->find($id);
+        $this->componentService->writeAdminLog('update', 'products', $beforeData, $afterData);
         return [
             'success' => $success,
             'message' => $successData['message'],

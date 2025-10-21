@@ -58,7 +58,8 @@ class UserController extends Controller
             $beforeData = $this->userService->find($id);
             $userData = $this->userService->update($id , $request->all());
 
-            $this->componentService->writeAdminLog('update', 'users', $beforeData, $userData['data']);
+            $afterData = $this->userService->find($id);
+            $this->componentService->writeAdminLog('update', 'users', $beforeData, $afterData['data']);
             return response()->json([
                 'success' => $userData['success'],
                 'message' => $userData['message'],

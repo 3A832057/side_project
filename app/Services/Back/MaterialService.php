@@ -57,7 +57,7 @@ class MaterialService
     //新增材料
     public function store($data){
         
-        $query = Product_material::create($data);
+        $query = Material::create($data);
         return [
                 'success' => true,
                 'message' => '新增資料成功!',
@@ -80,6 +80,26 @@ class MaterialService
                 'message' => '取得資料成功!',
                 'data' => $query->get()
             ];
+    }
+
+    // 用id找單一材料資料
+    public function find($id)
+    {
+        $material = Material::query()->where('id', $id)->first();
+
+        if (!$material) {
+            return [
+                'success' => false,
+                'message' => '材料不存在',
+                'data' => null,
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => '取得成功',
+            'data' => $material,
+        ];
     }
 
 }

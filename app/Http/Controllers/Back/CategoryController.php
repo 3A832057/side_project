@@ -74,7 +74,8 @@ class CategoryController extends Controller
 
             $userData = $this->categoryService->update($id , $request->all());
 
-            $this->componentService->writeAdminLog('update', 'categories', $beforeData['data'], $userData['data']);
+            $afterData = $this->categoryService->find($id);
+            $this->componentService->writeAdminLog('update', 'categories', $beforeData['data'], $afterData['data']);
 
             return response()->json([
                 'success' => $userData['success'],
@@ -99,7 +100,8 @@ class CategoryController extends Controller
             $beforeData = $this->categoryService->get(null);
             $data = $this->categoryService->setSort_order($request->all());
 
-            $this->componentService->writeAdminLog('update', 'categories', $beforeData['data'], $data['data']);
+            $afterData = $this->categoryService->get(null);
+            $this->componentService->writeAdminLog('update', 'categories', $beforeData['data'], $afterData['data']);
 
             return response()->json([
                 'success' => $data['success'],

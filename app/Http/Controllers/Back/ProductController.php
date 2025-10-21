@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\MixService\Back\ProductMixService;
 use App\Services\Back\ProductService;
 use App\Services\Back\ComponentService;
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\Back\ProductResource;
 class ProductController extends Controller
@@ -24,7 +25,7 @@ class ProductController extends Controller
 
         $data = $request->all();
 
-        // dd($data);
+        // dd(123);
         $tableData = $this->productService->getDatatable($data);
         return ProductResource::collection($tableData)->response()->getData(true);
 
@@ -103,7 +104,10 @@ class ProductController extends Controller
 
         try {
 
+            
             $productData = $this->productMixService->update($id , $request->all());
+
+            
 
             return response()->json([
                 'success' => $productData['success'],
@@ -127,7 +131,6 @@ class ProductController extends Controller
 
             $productMain = $this->productMixService->store($product);
 
-            $this->componentService->writeAdminLog('create', 'products', null, $productMain['data']);
             return response()->json([
                 'success' => $productMain['success'],
                 'message' => $productMain['message'],

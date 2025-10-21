@@ -20,13 +20,14 @@ class ComponentService
     //寫管理員log
     public function writeAdminLog($action , $mainDataTableName, $beforeDetails, $afterDetails)
     {
+
         $log = [
             'action' => $action,
             'mainDataTableName' => $mainDataTableName,
             'user_id' => Auth::id(),
-            'user_account' => Auth::user()->account ?? '未知使用者',
-            'before' => $beforeDetails,
-            'after' => $afterDetails,
+            'user_account' => Auth::user()->email ?? '未知使用者',
+            'before' => json_encode($beforeDetails, JSON_UNESCAPED_UNICODE),
+            'after' => json_encode($afterDetails, JSON_UNESCAPED_UNICODE),
             'created_at' => now(),
         ];
         
