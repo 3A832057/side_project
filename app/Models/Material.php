@@ -15,8 +15,12 @@ class Material extends Model
         'is_active',
     ];
 
-    public function productMaterials()
+    public function products()
     {
-        return $this->hasMany(Product_material::class, 'material_id', 'id');
+        return $this->belongsToMany(Product::class, 'product_materials', 'material_id', 'product_id');
+    }
+    public function sets()
+    {
+        return $this->belongsToMany(Product_set::class, 'product_materials', 'material_id', 'set_id');
     }
 }

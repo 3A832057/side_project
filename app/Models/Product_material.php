@@ -14,12 +14,12 @@ class Product_material extends Model
         'is_hidden',
         'hidden_at',
     ];
-    public function set()
-    {
-        return $this->belongsTo(Product_set::class, 'set_id', 'id');
-    }
+    // public function set()
+    // {
+    //     return $this->belongsTo(Product_set::class, 'set_id', 'id');
+    // }
     public function material()
     {
-        return $this->belongsTo(Material::class, 'material_id', 'id');
+        return $this->hasMany(Material::class, 'id', 'material_id');
     }
 }

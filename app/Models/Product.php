@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use function Laravel\Prompts\table;
 
 class Product extends Model
 {
+
     protected $fillable = [
         'name',
         'product_code',
@@ -26,6 +28,10 @@ class Product extends Model
         return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
 
+    public function materials()
+    {
+        return $this->belongsToMany(Material::class, 'product_materials', 'product_id', 'material_id');
+    }
     public function images()
     {
         return $this->hasMany(Product_image::class, 'product_id', 'id');

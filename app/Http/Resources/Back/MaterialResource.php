@@ -10,6 +10,16 @@ class MaterialResource extends JsonResource
     {
         return [
             'id'         => $this->id,
+            'name'         => $this->name,
+            'material_code' => $this->material_code,
+            'quantity'      => $this->quantity,
+            'cost'         => $this->cost,
+            'low_danger'  => $this->low_danger,
+            'is_enabled'  => $this->is_enabled,
+            'is_hidden'   => $this->is_hidden,
+            'hidden_at'  => $this->hidden_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

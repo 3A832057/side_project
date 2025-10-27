@@ -21,19 +21,14 @@ watch(filterField, (newFields) => {
   for (let i = 0; i < newFields.length; i++) {
     let selected=[]
     selected = props.selectField.find(item => item.value === newFields[i])
+    if(filterType.value[i] === undefined){ //如果都沒有選過，就給預設值
+        filterType.value[i] = '=';
+    }
     nowInput.value[i] = selected 
   }
 }, { deep: true })
 
-let selectType = ref([
-    {value: '=', text: '='},
-    {value: '>', text: '>'},
-    {value: '>=', text: '>='},
-    {value: '<', text: '<'},
-    {value: '<=', text: '<='},
-]);
 onMounted(async () => {
-    
     
     await props.selectField.forEach(element => {
         if(element.default !== undefined){
@@ -58,46 +53,54 @@ const emit = defineEmits(['search'])
 async function search() {
     filter = [];
     for (let i = 0; i < filterNum.value; i++) {
-        filter.push({field: filterField.value[i], type: filterType.value[i], value: filterValue.value[i]});
+        let join_table = nowInput.value[i]?.join_table ? nowInput.value[i].join_table : null;
+        filter.push({field: filterField.value[i], type: filterType.value[i], value: filterValue.value[i], join_table: join_table});
     }
-    console.log('searcg',filter)
     await emit('search', filter);
 }
 </script>
 
 <template>
-    <button class="me-3 mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" @click="filterNum++">新增條件</button>
-    <button class ="me-3 mb-4 bg-sky-500 text-white px-4 py-2 rounded hover:bg-sky-600" @click="filterNum>0 ? filterNum-- : filterNum">刪除條件</button>
-    <button class="mb-4 bg-violet-500 text-white px-4 py-2 rounded hover:bg-violet-600" @click="search">搜尋</button>
+    <div class="mb-4  p-4 border-gray-100 border-b-2 rounded  grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 ">
+        <button class="col-span-1 lg:col-span-2 me-3 mb-4 bg-teal-400 text-white px-4 py-2 rounded hover:bg-teal-800" @click="filterNum++">新增條件</button>
+        <button class ="col-span-1 lg:col-span-2 me-3 mb-4 bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-800" @click="filterNum>0 ? filterNum-- : filterNum">刪除條件</button>
+        <button class="col-span-1 lg:col-span-2 mb-4 bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-800" @click="search">搜尋</button>
 
-
-
-    <div v-for="count of filterNum"  >
-        <select class="inline" v-model="filterField[count - 1]">
-            <option :value="filed.value"  v-for="filed in selectField">{{ filed.text }}</option>
-        </select>
-        <div class="inline" v-if="nowInput[count - 1]?.type === 'text'">
-            <select v-model="filterType[count - 1]">
-                <option  v-for="type in selectType" :value=type.value>{{type.text}}</option>
+        <div v-for="count of filterNum"  class="w-5/6 text-gray-500 mb-4 col-span-3 flex ">
+            <select class="inline flex-none w-1/3 rounded-sm border border-gray-300" v-model="filterField[count - 1]" >
+                <option :value="filed.value"  v-for="filed in selectField">{{ filed.text }}</option>
             </select>
-            <input v-model="filterValue[count - 1]" type="text"  />
+            <div class="inline flex-none w-2/3 flex" v-if="nowInput[count - 1]?.type === 'text'">
+                <select v-model="filterType[count - 1]" class="flex-none w-1/4 rounded-sm border border-gray-300">
+                    <option value='=' selected> = </option>
+                    <option value='like'>包含</option>
+                    <option value='>'>></option>
+                    <option value='>='>>=</option>
+                    <option value='<'><</option>
+                    <option value='<='><=</option>
+                </select>
+                <input v-model="filterValue[count - 1]" class="flex-1 rounded-sm border border-gray-300" type="text"  />
+            </div>
+            <div class="inline flex-none w-2/3 flex" v-else-if="nowInput[count - 1]?.type === 'date'">
+                <select v-model="filterType[count - 1]" class="flex-none w-1/4 rounded-sm border border-gray-300">
+                    <option value="=">=</option>
+                    <option value=">">></option>
+                    <option value=">=">>=</option>
+                    <option value="<"><</option>
+                    <option value="<="><=</option>
+                </select>
+                <input v-model="filterValue[count - 1]" class="flex-1 rounded-sm border border-gray-300" type="date"  />
+            </div>
+            <div class="inline flex-none w-2/3 flex" v-else-if="nowInput[count - 1]?.type === 'select'">
+                <select v-model="filterType[count - 1]" class="flex-none w-1/4 rounded-sm border border-gray-300">
+                    <option value="=" selected>=</option>
+                </select>
+                <select v-model="filterValue[count - 1]" class="flex-1 w-full rounded-sm border border-gray-300">
+                    <option :value="option.value" v-for="option in nowInput[count - 1].options ">{{ option.text }}</option>
+                </select>
+            </div>
+            
         </div>
-        <div class="inline" v-else-if="nowInput[count - 1]?.type === 'date'">
-            <select v-model="filterType[count - 1]">
-                <option  v-for="type in selectType" :value=type.value>{{type.text}}</option>
-            </select>
-            <input v-model="filterValue[count - 1]" type="date"  />
-        </div>
-        <div class="inline" v-else-if="nowInput[count - 1]?.type === 'select'">
-            <select v-model="filterType[count - 1]">
-                <option value="=">=</option>
-            </select>
-            <select v-model="filterValue[count - 1]">
-                <option :value="option.value" v-for="option in nowInput[count - 1].options ">{{ option.text }}</option>
-            </select>
-        </div>
-    
     </div>
-    
     
 </template>

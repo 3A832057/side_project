@@ -107,5 +107,24 @@ class MaterialControlle extends Controller
     }
 
     
-    
+    public function getAllWithEnabled(Request $request){
+        try {
+
+            $params = $request->all();
+            $categoriesData = $this->materialService->get($params);
+
+            return response()->json([
+                'success' => $categoriesData['success'],
+                'message' => $categoriesData['message'],
+                'data' => $categoriesData['data'],
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => '伺服器錯誤：' . $e->getMessage(),
+                'data' => null,
+            ], 500);
+        }
+    }
 }

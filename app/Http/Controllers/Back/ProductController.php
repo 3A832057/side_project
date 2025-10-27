@@ -25,7 +25,6 @@ class ProductController extends Controller
 
         $data = $request->all();
 
-        // dd(123);
         $tableData = $this->productService->getDatatable($data);
         return ProductResource::collection($tableData)->response()->getData(true);
 
@@ -106,8 +105,6 @@ class ProductController extends Controller
 
             
             $productData = $this->productMixService->update($id , $request->all());
-
-            
 
             return response()->json([
                 'success' => $productData['success'],

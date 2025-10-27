@@ -19,6 +19,6 @@ class Product_set extends Model
     }
     public function materials()
     {
-        return $this->hasMany(Product_material::class, 'set_id', 'id');
+        return $this->belongsToMany(Material::class, 'product_materials', 'set_id', 'material_id');
     }
 }

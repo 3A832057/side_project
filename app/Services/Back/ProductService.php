@@ -9,8 +9,41 @@ class ProductService
     //找產品資料表
     public function getDatatable($serchValue)
     {
+        if (!empty($serchValue)) {
+            return Product::query()
+                ->select('*')
+                ->with(['categories', 'images', 'sets','materials','groups'])
+                ->where('is_hidden', false)
+                ->where(function ($query) use ($serchValue) {
+                    foreach ($serchValue as $condition) {
+                        $field = $condition['field'];
+                        $type = $condition['type'];
+                        $value = $condition['value'];
+                        if (isset($condition['join_table'])) {
+                            $joinTable = $condition['join_table'];
+                            $query->whereHas($joinTable, function ($q) use ($field, $type, $value) {
+                                if ($type !== 'like') {
+                                    $q->where($field, $type, $value);
+                                }
+                                elseif ($type === 'like') {
+                                    $q->where($field, 'like', '%' . $value . '%');
+                                }
+                            });
+                        } else {
+                            if ($type !== 'like') {
+                                $query->where($field, $type, $value);
+                            } elseif ($type === 'like') {
+                                $query->where($field, 'like', '%' . $value . '%');
+                            }
+                            
+                        }
+                    }
+                })
+                ->get();
+        }
         return Product::query()
             ->select('*')
+                ->with(['categories', 'images', 'sets','materials','groups'])
             ->where('is_hidden', false)
             ->get();
     }

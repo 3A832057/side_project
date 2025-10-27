@@ -15,6 +15,10 @@ class ProductResource extends JsonResource
             'updated_at'        => $this->updated_at ? $this->updated_at->toDateTimeString() : null,
             'price'             => $this->price,
             'is_enabled'        => $this->is_enabled,
+            'categories'        => CategoryResource::collection($this->whenLoaded('categories')),
+            'images'            => ProductImageResource::collection($this->whenLoaded('images')),
+            'sets'              => ProductSetResource::collection($this->whenLoaded('sets')),
+            'materials'         => MaterialResource::collection($this->whenLoaded('materials')),
             'is_hidden'         => $this->is_hidden,
             'hidden_at'         => $this->hidden_at ?  $this->hidden_at->toDateTimeString() :null,
         ];

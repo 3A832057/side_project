@@ -46,20 +46,17 @@ import { onMounted, ref , nextTick } from 'vue';
 import Filter from '@/Components/Back/Filter.vue';  
 import Swal from 'sweetalert2';
 import ProductUpdate from '@/Components/Back/Modals/ProductUpdate.vue';
-
 let selectField = ref([
     {value: 'name', text: '名稱', type: 'text'},
-    {value: 'email', text: '電子郵件', type: 'text'},
+    {value: 'categories.id', text: '類別', type: 'select' , join_table: 'categories', options: null},
+    {value: 'materials.id', text: '產品材料', type: 'text' , join_table: 'materials', options: null},
+    {value: 'product_code', text:'產品編碼', type:'text'},
+    {value: 'is_enabled', text:'產品狀態', type:'select' , options: [{value:1, text:'啟用'},{value:0, text:'停用'}]},
     {value: 'created_at', text: '建立時間' , type: 'date'},
     {value: 'updated_at', text: '更新時間' , type: 'date'},
-    {value: 'disabled_at', text: '停用時間' , type: 'date'},
-    {value: 'is_hi', text: '角色' , type: 'select', options: [{value:1 ,text:'管理員'}, {value:2 ,text:'一般會員'}]},
-    {value: 'is_enabled', text: '狀態' , type: 'select', options: [{value:1 ,text:'啟用'}, {value:0 ,text:'停用'}]},
 ]);
-
 let table = null 
 const tableElement = ref(null);
-const selectedCount = ref(0);
 const selectedElements = ref([]);
 const show = ref(false);
 const showAdd = ref(false);
@@ -70,6 +67,8 @@ let mounted = ref(false);
 onMounted(async () => {
     
     await nextTick()
+
+    await getAllCategoryList();
 
     table = new Tabulator(tableElement.value, {
     ajaxURL: '/api/back/product/datatable',
@@ -85,6 +84,35 @@ onMounted(async () => {
     columns:[
                 { title: '產品名稱', field: 'name' },
                 { title: '產品編碼', field: 'product_code' },
+                { title: '產品圖片', field: 'images', formatter:function(cell){
+                        let images = cell.getValue();
+
+                        let img_html = " ";
+                        for (let i = 0; i < images.length; i++) {
+                            img_html += "<img src='" + images[i].url + "' class='inline me-2 w-16 h-16 object-cover rounded'/>";
+                        }
+                        if(images.length > 0){
+                            return img_html;
+                        } else {
+                            return "無圖片";
+                        }
+                    } 
+                },
+                {
+                    title: "狀態",
+                    field: "is_enabled",
+                    formatter: "tickCross",
+                    cellClick: function(e, cell) {
+                        let currentValue = cell.getValue();
+                        let rowData = cell.getRow().getData();
+                        let new_is_enabled;
+                        if(currentValue == 0)  new_is_enabled = 1;
+                        else if(currentValue == 1) new_is_enabled = 0;
+
+                        updateEnabled(rowData.id , new_is_enabled);
+
+                    }
+                },
                 { title: '建立時間', field: 'created_at'},
                 { title: '更新時間', field: 'updated_at' ,hozAlign:"center"},
                 {
@@ -95,14 +123,17 @@ onMounted(async () => {
                         let action_input = '';
                         
                         action_input += "<button class='edit-btn bg-yellow-300  pt-1 pb-1 ps-2 pe-2  rounded-lg hover:bg-yellow-400 hover:text-white'><svg class='w-4 h-4 inline align-middle mr-1' xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 1025 1023\"><path fill=\"currentColor\" d=\"M896.428 1023h-768q-53 0-90.5-37.5T.428 895V127q0-53 37.5-90t90.5-37h576l-128 127h-384q-27 0-45.5 19t-18.5 45v640q0 27 19 45.5t45 18.5h640q27 0 45.5-18.5t18.5-45.5V447l128-128v576q0 53-37.5 90.5t-90.5 37.5zm-576-464l144 144l-208 64zm208 96l-160-159l479-480q17-16 40.5-16t40.5 16l79 80q16 16 16.5 39.5t-16.5 40.5z\"/></svg>編輯</button>";
-                        
+                        action_input += "<button class='ms-2 deleate-btn bg-red-400  pt-1 pb-1 ps-2 pe-2  rounded-lg hover:bg-red-600 hover:text-white'><svg class='w-4 h-4 inline align-middle mr-1' xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 1025 1023\"><path fill=\"currentColor\" d=\"M64 432c22.1 0 40 17.9 40 40s-17.9 40-40 40-40-17.9-40-40c0-22.1 17.9-40 40-40zM64 0c26.5 0 48 21.5 48 48 0 .6 0 1.1 0 1.7l-16 304c-.9 17-15 30.3-32 30.3S33 370.7 32 353.7L16 49.7c0-.6 0-1.1 0-1.7 0-26.5 21.5-48 48-48z\"/></svg>刪除</button>";
                         return action_input;
                     },
                     cellClick: function (e, cell) {
-                            let rowData = cell.getRow().getData();
-                            if (e.target.classList.contains("edit-btn")) {
-                                show.value = true;
-                                productData.value.id = rowData.id;
+                        let rowData = cell.getRow().getData();
+                        if (e.target.classList.contains("edit-btn")) {
+                            show.value = true;
+                            productData.value.id = rowData.id;
+                        }
+                        if (e.target.classList.contains("deleate-btn")) {
+                           deleteData(rowData.id );
                         }
                     },
                 }
@@ -113,7 +144,7 @@ onMounted(async () => {
                 width = element.offsetWidth,
                 rowTable, cellContents;
                 let rowTabletr;
-
+                console.log(data);
                 try {
                     const prev = element.querySelectorAll('.expanded-row');
                     prev.forEach(n => n.remove());
@@ -129,10 +160,23 @@ onMounted(async () => {
 
                 rowTabletr = document.createElement("tr");
 
-                cellContents = "<td><p>" + data.name + "</p></td>";
+                cellContents = "";
 
-                cellContents += "<td><div><strong>Type:</strong> " + data.product_code + "</div></td>"
 
+                cellContents += "<td>";
+                for (let i = 0; i < data.categories.length; i++) {
+                    cellContents += "<div><strong>類別"+ (i+1) + ":</strong> " + data.categories[i].name +"</div>";
+                }
+                cellContents+= "</td><td>";
+                for (let i = 0; i < data.materials.length; i++) {
+                    cellContents += "<strong>材料"+ (i+1) + ":</strong> " + data.materials[i].name +"<br/>" 
+                }
+                cellContents+= "</td><td>";
+
+                for (let i = 0; i < data.sets.length; i++) {
+                    cellContents += "<strong>套組"+ (i+1) + ":</strong> " + data.sets[i].name +"<br/>" 
+                }
+                cellContents += "</td>";
                 rowTabletr.innerHTML = cellContents;
 
                 rowTable.appendChild(rowTabletr);
@@ -175,14 +219,15 @@ function closeModal() {
     table.replaceData(); 
 }
 
-function search(filter) {
-    console.log("搜尋條件123:", filter);
-    table.setFilter(filter);
+async function search(filter) {
+    let returnData = await axios.get('/api/back/product/datatable', { params: filter });
+    console.log(returnData);
+    table.replaceData(returnData.data.data);
 }
 
 async function updateEnabled(id , new_is_enabled){
     let returnData = 
-        await axios.put('/api/back/user/' + id, 
+        await axios.put('/api/back/product/' + id, 
             {
                 is_enabled: new_is_enabled,
             }
@@ -213,6 +258,48 @@ async function updateEnabled(id , new_is_enabled){
             showConfirmButton: false,
             timer: 1500
         })
+    }
+}
+async function getAllCategoryList(){
+    
+    let categoryList = await axios.get('/api/back/category')
+    let allCategoryList = categoryList.data.data;
+    selectField.value[1].options = allCategoryList.map(item => ({ value: item.id, text: item.name }));
+}
+async function deleteData(id){
+    let result = await Swal.fire({
+        title: '確定要刪除這筆資料嗎？',
+        text: "刪除後將無法恢復！",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: '是的，刪除它！',
+        cancelButtonText: '取消'
+    })
+    if (result.isConfirmed) {
+        let returnData = await await axios.put('/api/back/product/' + id, 
+            {
+                is_hidden: true,
+            }
+        );
+        if (returnData.data.success) {
+            await Swal.fire({
+                icon: 'success',
+                title: '刪除成功',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            table.replaceData();
+        }
+        else{
+            Swal.fire({
+                icon: 'error',
+                title: '刪除失敗',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
     }
 }
 </script>
