@@ -70,12 +70,14 @@ Route::prefix('back')->middleware([
             ->name('put.product.update');
     });
     Route::prefix('material')->group(function () {
-        Route::get('/datatable/{level}', [BackMaterialController::class, 'getDatatableWithLevel'])
+        Route::get('/datatable', [BackMaterialController::class, 'getDatatable'])
             ->name('get.material.datatable');
         Route::put('{id}', [BackMaterialController::class,'update'])
             ->name('put.material.update');
         Route::get('/getAllWithEnabled', [BackMaterialController::class,'getAllWithEnabled'])
             ->name('get.material.getAllWithEnabled');
+        Route::get('find/{id}', [BackMaterialController::class,'find'])
+            ->name('get.material.find');
         Route::get('/', [BackMaterialController::class,'get'])
             ->name('get.material.all');
         Route::post('/', [BackMaterialController::class,'store'])

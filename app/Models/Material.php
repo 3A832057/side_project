@@ -9,10 +9,13 @@ class Material extends Model
     protected $fillable = [
         'material_code',
         'name',
-        'description',
+        'cost',
         'price',
-        'stock',
-        'is_active',
+        'quantity',
+        'is_enable',
+        'is_hidden',
+        'hidden_at',
+        'low_danger'
     ];
 
     public function products()

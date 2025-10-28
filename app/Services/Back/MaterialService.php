@@ -11,21 +11,21 @@ class MaterialService
     //找材料資料表
     public function getDatatable($level = 1)
     {
-        return Product_material::query()
-            ->select(['id', 'name', 'parent_id', 'description', 'sort_order', 'is_enabled','created_at', 'updated_at'])
-            ->where('level', $level)
+        return Material::query()
+            ->select('*')
+            ->where('is_hidden', 0)
             ->get();
     }
 
     public function update($id , $data)
     {
 
-        $user = Product_material::find($id);
+        $user = Material::find($id);
 
         if (!$user) {
             return [
                     'success' => false, 
-                    'message' => '找不到類別',
+                    'message' => '找不到材料',
                     'data' => null
             ];
         }
@@ -36,15 +36,23 @@ class MaterialService
             $updateData['name'] = $data['name'];
         }
 
-        if (isset($data['description'])) {
-            $updateData['description'] = $data['description'];
-        }
-
         if (isset($data['is_enabled'])) {
             $updateData['is_enabled'] = $data['is_enabled'];
         }
-        if (isset($data['parent_id'])) {
-            $updateData['parent_id'] = $data['parent_id'];
+        if (isset($data['cost'])) {
+            $updateData['cost'] = $data['cost'];
+        }
+
+        if (isset($data['low_danger'])) {
+            $updateData['low_danger'] = $data['low_danger'];
+        }
+
+        if (isset($data['quantity'])) {
+            $updateData['quantity'] = $data['quantity'];
+        }
+
+        if (isset($data['material_code'])) {
+            $updateData['material_code'] = $data['material_code'];
         }
         $user->update($updateData);
         return [

@@ -18,8 +18,8 @@ class MaterialResource extends JsonResource
             'is_enabled'  => $this->is_enabled,
             'is_hidden'   => $this->is_hidden,
             'hidden_at'  => $this->hidden_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at'  => $this->created_at ? $this->created_at->toDateTimeString() : null,
+            'updated_at'  => $this->updated_at ? $this->updated_at->toDateTimeString() : null,
         ];
     }
 }
