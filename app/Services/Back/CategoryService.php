@@ -79,9 +79,11 @@ class CategoryService
         if (isset($data['is_enabled'])) {
             $updateData['is_enabled'] = $data['is_enabled'];
         }
+        
         if (isset($data['parent_id'])) {
             $updateData['parent_id'] = $data['parent_id'];
         }
+
         $user->update($updateData);
         return [
                 'success' => true, 

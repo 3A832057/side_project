@@ -200,7 +200,7 @@ async function deleteData(id){
         cancelButtonText: '取消'
     })
     if (result.isConfirmed) {
-        let returnData = await await axios.put('/api/back/product/' + id, 
+        let returnData = await await axios.put('/api/back/material/' + id, 
             {
                 is_hidden: true,
             }

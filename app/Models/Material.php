@@ -12,7 +12,7 @@ class Material extends Model
         'cost',
         'price',
         'quantity',
-        'is_enable',
+        'is_enabled',
         'is_hidden',
         'hidden_at',
         'low_danger'

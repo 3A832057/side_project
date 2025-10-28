@@ -20,9 +20,9 @@ class MaterialService
     public function update($id , $data)
     {
 
-        $user = Material::find($id);
+        $material = Material::find($id);
 
-        if (!$user) {
+        if (!$material) {
             return [
                     'success' => false, 
                     'message' => '找不到材料',
@@ -39,6 +39,11 @@ class MaterialService
         if (isset($data['is_enabled'])) {
             $updateData['is_enabled'] = $data['is_enabled'];
         }
+
+        if (isset($data['is_hidden'])) {
+            $updateData['is_hidden'] = $data['is_hidden'];
+        }
+
         if (isset($data['cost'])) {
             $updateData['cost'] = $data['cost'];
         }
@@ -54,11 +59,13 @@ class MaterialService
         if (isset($data['material_code'])) {
             $updateData['material_code'] = $data['material_code'];
         }
-        $user->update($updateData);
+        $material->update($updateData);
+
+
         return [
                 'success' => true, 
                 'message' => '更新成功!',
-                'data' => $user
+                'data' => $material
         ];
     }
   
