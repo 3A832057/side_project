@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('material_quantity_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('material_code')->comment('材料代碼');
+            $table->int('material_id')->comment('材料id');
             $table->integer('before')->comment('原始數量');
             $table->integer('quantity')->comment('變動數量');
             $table->integer('after')->comment('變動後數量');
-            $table->integer('description')->comment('變動說明');
+            $table->string('description')->comment('變動說明');
             $table->string('admin_account')->comment('變動人員帳號');
             $table->string('admin_name')->comment('變動人員姓名');
             $table->timestamps();

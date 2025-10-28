@@ -9,7 +9,7 @@ use App\Services\Back\ProductMaterialService;
 use App\Services\Back\ProductGroupService;
 use App\Services\Back\ComponentService;
 use App\Models\Product;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class ProductMixService
 {

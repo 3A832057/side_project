@@ -75,10 +75,6 @@ let quantity = ref(0);
 const emit = defineEmits(['close'])
 
 onMounted(async () => {
-    await getCategoriesList();
-    await getMaterialList();
-    await findProduct();
-
 });
 
 

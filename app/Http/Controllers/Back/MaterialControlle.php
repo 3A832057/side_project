@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Resources\Back\MaterialResource;
 use App\Services\Back\MaterialService;
+use App\MixService\Back\MaterialMixService;
 use Illuminate\Http\Request;
 
 use App\Services\Back\ComponentService;
@@ -12,10 +13,13 @@ class MaterialControlle extends Controller
 {
     protected MaterialService $materialService;
     protected ComponentService $componentService;
+    protected MaterialMixService $materialMixService;
 
-    public function __construct(MaterialService $materialService, ComponentService $componentService)
+    public function __construct(MaterialService $materialService, ComponentService $componentService , MaterialMixService $materialMixService)
     {
         $this->materialService = $materialService;
+        $this->materialMixService = $materialMixService;
+
         $this->componentService = $componentService;
     }
 
@@ -125,6 +129,27 @@ class MaterialControlle extends Controller
                 'message' => '伺服器錯誤：' . $e->getMessage(),
                 'data' => null,
             ], 500);
+        }
+    }
+
+    public function quantityUpdate(Request $request){
+        try {
+            $material = $request->all();
+
+            $materialMain = $this->materialMixService->quantityUpdate($material);
+
+            return response()->json([
+                'success' => $materialMain['success'],
+                'message' => $materialMain['message'],
+                'data' => $materialMain['data'],
+            ]);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => '伺服器錯誤：' . $e->getMessage(),
+                'data' => null,
+            ], 500);    
         }
     }
 }

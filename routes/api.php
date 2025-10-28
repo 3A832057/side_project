@@ -72,6 +72,8 @@ Route::prefix('back')->middleware([
     Route::prefix('material')->group(function () {
         Route::get('/datatable', [BackMaterialController::class, 'getDatatable'])
             ->name('get.material.datatable');
+        Route::put('quantity',[BackMaterialController::class,'quantityUpdate'])
+            ->name('put.material.quantityUpdate');
         Route::put('{id}', [BackMaterialController::class,'update'])
             ->name('put.material.update');
         Route::get('/getAllWithEnabled', [BackMaterialController::class,'getAllWithEnabled'])

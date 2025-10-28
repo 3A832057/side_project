@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use App\MixService\Back\ProductMixService;
 use App\Services\Back\ProductService;
 use App\Services\Back\ComponentService;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\Back\ProductResource;
 class ProductController extends Controller

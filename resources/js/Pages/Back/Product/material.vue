@@ -19,18 +19,23 @@
 
                     <Filter  :selectField="selectField" @search="search" />
 
-                    <button @click="showAdd = true" class="mt-4 mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    <button @click="showAdd = true" class="mt-4 mb-4 me-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         
                         <svg class='w-5 h-5 inline align-middle mb-1' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#ffffff" d="M136 192C136 125.7 189.7 72 256 72C322.3 72 376 125.7 376 192C376 258.3 322.3 312 256 312C189.7 312 136 258.3 136 192zM48 546.3C48 447.8 127.8 368 226.3 368L285.7 368C384.2 368 464 447.8 464 546.3C464 562.7 450.7 576 434.3 576L77.7 576C61.3 576 48 562.7 48 546.3zM544 160C557.3 160 568 170.7 568 184L568 232L616 232C629.3 232 640 242.7 640 256C640 269.3 629.3 280 616 280L568 280L568 328C568 341.3 557.3 352 544 352C530.7 352 520 341.3 520 328L520 280L472 280C458.7 280 448 269.3 448 256C448 242.7 458.7 232 472 232L520 232L520 184C520 170.7 530.7 160 544 160z"/></svg>
                         新增材料
                     </button>
-                    
+                    <button @click="showQuantityUpdate = true" class="mt-4 mb-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
+                        
+                        <svg class='w-5 h-5 inline align-middle mb-1' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#ffffff" d="M136 192C136 125.7 189.7 72 256 72C322.3 72 376 125.7 376 192C376 258.3 322.3 312 256 312C189.7 312 136 258.3 136 192zM48 546.3C48 447.8 127.8 368 226.3 368L285.7 368C384.2 368 464 447.8 464 546.3C464 562.7 450.7 576 434.3 576L77.7 576C61.3 576 48 562.7 48 546.3zM544 160C557.3 160 568 170.7 568 184L568 232L616 232C629.3 232 640 242.7 640 256C640 269.3 629.3 280 616 280L568 280L568 328C568 341.3 557.3 352 544 352C530.7 352 520 341.3 520 328L520 280L472 280C458.7 280 448 269.3 448 256C448 242.7 458.7 232 472 232L520 232L520 184C520 170.7 530.7 160 544 160z"/></svg>
+                        庫存異動單
+                    </button>
                     <div ref="tableElement" class="tabulator striped"></div>
                 </div>
             </div>
         </div>
     </AuthenticatedLayout>
     <MaterialUpdate v-if="show" :data="productData" @close="closeModal"  />
+    <QuantityUpdate v-if="showQuantityUpdate"  @close="closeModal"  />
     <MaterialAdd v-if="showAdd" @close="closeModal" />
 
 </template>
@@ -45,6 +50,9 @@ import { onMounted, ref , nextTick } from 'vue';
 import Filter from '@/Components/Back/Filter.vue';  
 import Swal from 'sweetalert2';
 import MaterialUpdate from '@/Components/Back/Modals/MaterialUpdate.vue';
+import QuantityUpdate from '@/Components/Back/Modals/QuantityUpdate.vue';
+
+
 let selectField = ref([
     {value: 'name', text: '名稱', type: 'text'},
     {value: 'material_code', text:'材料編碼', type:'text'},
@@ -59,6 +67,8 @@ let table = null
 const tableElement = ref(null);
 const show = ref(false);
 const showAdd = ref(false);
+const showQuantityUpdate = ref(false);
+
 let productData = ref({
     id: null ,
 });
@@ -135,6 +145,8 @@ onMounted(async () => {
 function closeModal() {
     show.value = false;
     showAdd.value = false;
+    showQuantityUpdate.value = false;
+
     if ( productData.value.id) {
         const row = table.getRow(productData.value.id);
         if (row) {

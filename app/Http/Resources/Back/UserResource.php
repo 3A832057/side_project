@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Resources\Back;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource

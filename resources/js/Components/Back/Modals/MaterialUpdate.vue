@@ -28,11 +28,6 @@
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
-                <label for="quantity" class="block text-sm/6 font-semi text-zinc-900">數量</label>
-                <input id="quantity" type="number" name="quantity" autocomplete="given-quantity"  v-model="quantity"
-                        class="w-full rounded-sm border border-gray-300 h-8">
-            </div>
-            <div class="mb-2">
                 <label for="low_danger" class="block text-sm/6 font-semi text-zinc-900">最低水位</label>
                 <input id="low_danger" type="number" name="low_danger" autocomplete="given-low_danger"  v-model="low_danger"
                         class="w-full rounded-sm border border-gray-300 h-8">
@@ -69,7 +64,6 @@ let name = ref('');
 let material_code = ref('');
 let cost = ref(0);
 let low_danger = ref(0);
-let quantity = ref(0);
 
 let set_material= ref([])
 
@@ -85,6 +79,8 @@ function close() {
     emit('close')
 }
 
+
+
 async function findMaterial(){
     let returnData = 
     await axios.get('/api/back/material/find/'+ props.data.id)  
@@ -95,7 +91,7 @@ async function findMaterial(){
         material_code.value = returnData.data.data.material_code;
         cost.value = returnData.data.data.cost;
         low_danger.value = returnData.data.data.low_danger;
-        quantity.value = returnData.data.data.quantity;
+
         
     } else {
         console.error(returnData.data.message)
@@ -121,7 +117,6 @@ async function submit() {
                 material_code: material_code.value,
                 cost: cost.value,
                 low_danger: low_danger.value,
-                quantity:quantity.value
             }
         )
 

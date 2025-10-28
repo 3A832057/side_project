@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Resources\Back;
-use DB;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductImageResource extends JsonResource
