@@ -5,6 +5,9 @@ namespace App\Http\Requests\Back\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @mixin \Illuminate\Http\Request
+ */
 class ProductUpdateRequest extends FormRequest
 {
     /**
@@ -43,15 +46,15 @@ class ProductUpdateRequest extends FormRequest
                 Rule::unique('products', 'product_code')->ignore($productId),
             ],
             'product.description' => ['nullable', 'string'],
-            'product.price' => ['nullable', 'numeric', 'min:0'],
+            'product.price' => ['nullable', 'string', 'max:50'],
             'product.sort_order' => ['sometimes', 'integer'],
             'is_enabled' => ['sometimes', 'boolean'],
             'is_hidden' => ['sometimes', 'boolean'],
             'hidden_at' => ['nullable', 'date'],
             'categories' => ['sometimes', 'array'],
-            'categories.*' => ['integer', 'exists:categories,id'],
+            'categories.*' => ['required', 'integer', 'exists:categories,id'],
             'images' => ['required', 'array', 'size:12'],
-            'images.*' => ['nullable', 'string'],
+            'images.*' => ['nullable', 'string'],           
             'set.group_number' => ['required', 'integer', 'min:1'],
             'set.sets' => ['required', 'array'],
             'set.sets.*.data' => ['required'],
@@ -77,8 +80,8 @@ class ProductUpdateRequest extends FormRequest
 
             'product.description.string' => '描述必須為文字。',
 
-            'product.price.numeric' => '價格必須為數字。',
-            'product.price.min' => '價格不得為負數。',
+            'product.price.string' => '價格必須為字串。',
+            'product.price.max' => '價格不能超過50個字元。',
 
             'is_enabled.boolean' => '啟用欄位必須為布林值。',
             'is_hidden.boolean' => '隱藏欄位必須為布林值。',
@@ -91,6 +94,7 @@ class ProductUpdateRequest extends FormRequest
             'images.*.string' => '每個圖片欄位必須為字串或為空。',
 
             'categories.array' => '類別必須為陣列。',
+            'categories.*.required' => '類別不可為空。',
             'categories.*.integer' => '類別 ID 必須為整數。',
             'categories.*.exists' => '所選類別不存在。',
 

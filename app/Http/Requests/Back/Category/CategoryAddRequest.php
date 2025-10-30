@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Back\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class CategoryAddRequest extends FormRequest
 {
@@ -22,13 +21,19 @@ class CategoryAddRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'category_code' => ['nullable', 'string', 'max:50', Rule::unique('categories', 'category_code')],
-            'description' => ['nullable', 'string'],
-            'is_enabled' => ['sometimes', 'boolean'],
-            'sort_order' => ['sometimes', 'integer'],
-        ];
+         $rules  = [];
+
+         if(($this->all())['level'] > 1) {
+               $rules['parent_id'] = ['required', 'integer', 'exists:categories,id'];
+         }
+
+         $rules['level'] = ['required', 'integer', 'min:1'];
+         $rules['name'] = ['required', 'string', 'max:255'];
+         $rules['description'] = ['nullable', 'string'];
+         $rules['is_enabled'] = ['sometimes', 'boolean'];
+         $rules['sort_order'] = ['sometimes', 'integer'];
+
+         return $rules;
     }
 
     /**
@@ -37,11 +42,17 @@ class CategoryAddRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'parent_id.required' => '請選擇父類別。',
+            'parent_id.integer' => '父類別必須為整數。',
+            'parent_id.exists' => '所選擇的父類別不存在。',
+
+            'level.required' => '請選擇類別層級。',
+            'level.integer' => '類別層級必須為整數。',
+            'level.min' => '類別層級必須至少為1。',
+            
+            
             'name.required' => '請輸入類別名稱。',
             'name.max' => '類別名稱不能超過255個字元。',
-
-            'category_code.max' => '類別代碼不能超過50個字元。',
-            'category_code.unique' => '類別代碼已存在。',
 
             'description.string' => '描述必須為文字。',
 

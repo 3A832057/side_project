@@ -4,6 +4,9 @@ namespace App\Http\Requests\Back\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @mixin \Illuminate\Http\Request
+ */
 class ProductAddRequest extends FormRequest
 {
     /**
@@ -42,7 +45,7 @@ class ProductAddRequest extends FormRequest
             'is_hidden' => ['sometimes', 'boolean'],
             'hidden_at' => ['nullable', 'date'],
             'categories' => ['sometimes', 'array'],
-            'categories.*' => ['integer', 'exists:categories,id'],
+            'categories.*' => ['required', 'integer', 'exists:categories,id'],
             'images' => ['required', 'array', 'size:12'],
             'images.*' => ['nullable', 'string'],
             'set.group_number' => ['required', 'integer', 'min:1'],
@@ -86,6 +89,7 @@ class ProductAddRequest extends FormRequest
             'images.size' => '圖片欄位數量必須為12個位置。',
             'images.*.string' => '每個圖片欄位必須為字串或為空。',
             'categories.array' => '類別必須為陣列。',
+            'categories.*.required' => '類別不可為空。',
             'categories.*.integer' => '類別 ID 必須為整數。',
             'categories.*.exists' => '所選類別不存在。',
 

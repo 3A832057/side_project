@@ -137,7 +137,6 @@ onMounted(async () => {
                 title: "狀態",
                 field: "is_enabled",
                 formatter: "tickCross",
-                // editor: true,
                 cellClick: function(e, cell) {
 
                     let currentValue = cell.getValue();
@@ -183,13 +182,13 @@ onMounted(async () => {
         
         tableChild.setData("/api/back/category/childDatatable", {parent:childFilter});
     });
-
+    
+ 
     table.on("cellEdited", function(cell){
         
         const newValue = cell.getValue();
         const rowData = cell.getRow().getData();
-        console.log("編輯欄位:", cell.getField(), "新值:", newValue, "舊值:", rowData.name);
-        
+        console.log("編輯資料:", rowData);
         switch(cell.getField()){
             case 'name':
                 updateName(rowData.id , newValue);
@@ -198,6 +197,7 @@ onMounted(async () => {
                 updateDescription(rowData.id , newValue);
                 break;
         }
+
     });
 
     // ==================================子類別表格=========================================
@@ -278,6 +278,7 @@ onMounted(async () => {
         ],
         
     });
+
     tableChild.on("rowSelectionChanged", function(e,row){
         let childFilter = [];
         for (let i = 0; i < tableChild.getSelectedData().length; i++) {
@@ -287,6 +288,7 @@ onMounted(async () => {
         tableGrandChild.setData("/api/back/category/childDatatable", {parent:childFilter});
     });
 
+    
     tableChild.on("cellEdited", function(cell){
         
         const newValue = cell.getValue();
@@ -436,6 +438,7 @@ async function updateName(id , new_name){
 
     if (returnData.data.success) {
         await getAllCategoryList();
+        editMode.value = false;
         
         await Swal.fire({
             icon: 'success',
@@ -445,7 +448,6 @@ async function updateName(id , new_name){
         }).then(()=>{
             refresh(); 
         })
-
     } else {
         console.error(returnData.data.message)
         await Swal.fire({
@@ -471,7 +473,8 @@ async function updateDescription(id , new_description){
         )
 
     if (returnData.data.success) {
-        
+        editMode.value = false;
+
         await Swal.fire({
             icon: 'success',
             title: '修改成功',
@@ -738,8 +741,8 @@ async function insertRow(){
         newRowData['level'] = 3;
     }
 
-    returnData = 
-        await axios.post('/api/back/category', 
+    try {
+        returnData =  await axios.post('/api/back/category', 
             {
                 name: newRowData.name,
                 description: newRowData.description,
@@ -749,24 +752,34 @@ async function insertRow(){
                 level: newRowData.level,
             }
         )
-    if (returnData.data.success) {
+        if (returnData.data.success) {
 
+            await Swal.fire({
+                    icon: 'success',
+                    title: '新增成功',
+                    showConfirmButton: false,
+                    timer: 1500
+
+                }).then(()=>{
+                    startInsertTable.value = false;
+                    startInsertTableChild.value = false;
+                    startInsertTableGrandChild.value = false;
+                    editMode.value = false;
+                })
+            await getAllCategoryList();
+            await refresh();
+        }
+
+    } catch (error) {
         await Swal.fire({
-                icon: 'success',
-                title: '新增成功',
-                showConfirmButton: false,
-                timer: 1500
-
-            }).then(()=>{
-                startInsertTable.value = false;
-                startInsertTableChild.value = false;
-                startInsertTableGrandChild.value = false;
-                editMode.value = false;
-            })
-        await getAllCategoryList();
-        await refresh();
-
-
+            icon:'error',
+            title:'新增失敗',
+            text: error.response.data.message,
+            showConfirmButton: false,
+            timer: 1500
+        });
+        return;
     }
+   
 }
 </script>

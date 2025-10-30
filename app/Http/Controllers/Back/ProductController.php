@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Back\Product\ProductQuickUpdateRequest;
 use App\Http\Requests\Back\Product\ProductAddRequest;
 use App\Http\Requests\Back\Product\ProductUpdateRequest;
-use App\Http\Requests\Back\Product\ProductQuickUpdateRequest;
 
 use App\MixService\Back\ProductMixService;
 use App\Services\Back\ProductService;
@@ -80,7 +80,7 @@ class ProductController extends Controller
     }
 
     // 更新產品資料(主檔)
-    public function update($id, Request $request){
+    public function update($id,ProductQuickUpdateRequest $request){
 
         try {
 

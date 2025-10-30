@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Back\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 
 class CategoryQuickUpdateRequest extends FormRequest
 {
@@ -14,18 +15,37 @@ class CategoryQuickUpdateRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     * Used for quick/index updates (eg. toggling is_enabled)
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            'is_enabled' => ['required', 'boolean'],
-            'sort_order' => ['sometimes', 'integer'],
-        ];
+         $rules  = [];
+
+         
+        $categoryId = $this->route('id');
+
+        if( !DB::table('categories')->where('id', $categoryId)->exists() ){
+            $rules['id'] = ['exists:categories,id'];
+        }
+
+
+         if(isset($this->all()['level'])) {
+             $rules['level'] = ['required', 'integer', 'min:1'];
+         }
+
+         if(isset($this->all()['name'])) {
+            $rules['name'] = ['required', 'string', 'max:255'];
+         }
+
+         if(isset($this->all()['description'])) {
+            $rules['description'] = ['nullable', 'string'];
+         }
+
+         if(isset($this->all()['is_enabled'])) {
+            $rules['is_enabled'] = ['required', 'boolean'];
+         }
+
+        
+
+         return $rules;
     }
 
     /**
@@ -34,9 +54,22 @@ class CategoryQuickUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'is_enabled.required' => '請提供啟用狀態（is_enabled）。',
-            'is_enabled.boolean' => '啟用狀態必須為布林值。',
-            'sort_order.integer' => '排序必須為整數。',
+            'parent_id.required' => '請選擇父類別。',
+            'parent_id.integer' => '父類別必須為整數。',
+            'parent_id.exists' => '所選擇的父類別不存在。',
+
+            'level.required' => '請選擇類別層級。',
+            'level.integer' => '類別層級必須為整數。',
+            'level.min' => '類別層級必須至少為1。',
+            
+            
+            'name.required' => '請輸入類別名稱。',
+            'name.max' => '類別名稱不能超過255個字元。',
+
+            'description.string' => '描述必須為文字。',
+
+            'is_enabled.required' => '請輸入狀態。',
+            'is_enabled.boolean' => '啟用欄位必須為布林值。',
         ];
     }
 }

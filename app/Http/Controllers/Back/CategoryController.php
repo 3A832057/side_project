@@ -7,6 +7,8 @@ use App\Services\Back\ComponentService;
 use App\Http\Resources\Back\CategoryResource;
 use App\Services\Back\CategoryService;
 use Illuminate\Http\Request;
+use App\Http\Requests\Back\Category\CategoryAddRequest;
+use App\Http\Requests\Back\Category\CategoryQuickUpdateRequest;
 
 class CategoryController extends Controller
 {
@@ -67,7 +69,7 @@ class CategoryController extends Controller
     }
 
     // 更新類別資料
-    public function update($id, Request $request){
+    public function update($id, CategoryQuickUpdateRequest $request){
 
         try {
             $beforeData = $this->categoryService->find($id);
@@ -145,7 +147,8 @@ class CategoryController extends Controller
 
         
     }
-    public function store(Request $request){
+
+    public function store(CategoryAddRequest $request){
         try {
 
 
