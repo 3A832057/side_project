@@ -11,6 +11,7 @@ class Product_material extends Model
         'product_id',
         'material_id',
         'sort_order',
+        'set_id',
         'is_hidden',
         'hidden_at',
     ];

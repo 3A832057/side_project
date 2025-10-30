@@ -9,8 +9,42 @@ class MaterialService
 {
     
     //找材料資料表
-    public function getDatatable($level = 1)
+    public function getDatatable($serchValue)
     {
+        if (!empty($serchValue)) {
+            return Material::query()
+                ->select('*')
+                ->where('is_hidden', false)
+                ->where(function ($query) use ($serchValue) {
+                    foreach ($serchValue as $condition) {
+                        $field = $condition['field'];
+                        $type = $condition['type'];
+                        $value = $condition['value'];
+
+                        if (isset($condition['join_table'])) {
+                            $joinTable = $condition['join_table'];
+                            $query->whereHas($joinTable, function ($q) use ($field, $type, $value) {
+                                if ($type !== 'like') {
+                                    $q->where($field, $type, $value);
+                                }
+                                elseif ($type === 'like') {
+                                    $q->where($field, 'like', '%' . $value . '%');
+                                }
+                            });
+                        } else {
+                            if ($type !== 'like') {
+                                $query->where($field, $type, $value);
+                            } elseif ($type === 'like') {
+                                $query->where($field, 'like', '%' . $value . '%');
+                            }
+                            
+                        }
+                    }
+                })
+                ->get();
+        }
+
+
         return Material::query()
             ->select('*')
             ->where('is_hidden', 0)

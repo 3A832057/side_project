@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('product_code')->comment('產品代碼');
             $table->boolean('is_enabled')->default(true)->comment('0:停用, 1:啟用');
-            $table->integer('price')->default(0)->comment('產品價格(以最低為主)');
+            $table->string('price')->comment('產品價格(用於顯示)');
             $table->integer('sort_order')->default(0)->comment('排列順序');
             $table->boolean('can_choose')->default(false)->comment('可以做選擇');
             $table->boolean('is_hidden')->default(false)->comment('當作刪除使用');

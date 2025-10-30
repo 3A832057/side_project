@@ -159,7 +159,7 @@ function closeModal() {
 }
 
 async function search(filter) {
-    let returnData = await axios.get('/api/back/product/datatable', { params: filter });
+    let returnData = await axios.get('/api/back/material/datatable', { params: filter });
     console.log(returnData);
     table.replaceData(returnData.data.data);
 }

@@ -99,7 +99,7 @@ class ProductImageService
             ];
         }
         if (!empty($rows)) {
-            $productMain['data']->images()->createMany($rows);
+            $productMain->images()->createMany($rows);
         }
         return [
                 'success' => true, 

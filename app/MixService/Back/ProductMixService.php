@@ -46,6 +46,7 @@ class ProductMixService
         if($success) 
         {
            $this->productImageService->addProductImages($productMain['data'], $product);
+
         }
         
         if($success) 
@@ -75,7 +76,8 @@ class ProductMixService
 
                     if ($setFirst !== $itemFirst || $setSecond !== $itemSecond) continue;
 
-                    $this->productMaterialService->addProductMaterial($productMain, $mIndex, $setModel , $item);
+                    $this->productMaterialService->addProductMaterial($productMain['data'], $mIndex, $setModel , $item);
+
                 }
 
             }

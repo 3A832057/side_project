@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Back;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Back\Product\ProductAddRequest;
+use App\Http\Requests\Back\Product\ProductUpdateRequest;
+use App\Http\Requests\Back\Product\ProductQuickUpdateRequest;
+
 use App\MixService\Back\ProductMixService;
 use App\Services\Back\ProductService;
 use App\Services\Back\ComponentService;
-use Illuminate\Support\Facades\DB;
+
 use Illuminate\Http\Request;
 use App\Http\Resources\Back\ProductResource;
 class ProductController extends Controller
@@ -99,7 +103,7 @@ class ProductController extends Controller
     }
 
     // 修改產品資料(全部包括材料、類別)
-    public function updateAll($id, Request $request){
+    public function updateAll($id, ProductUpdateRequest $request){
 
         try {
 
@@ -122,7 +126,7 @@ class ProductController extends Controller
 
     }
     // 新增產品資料(全部包括材料、類別)
-    public function store(Request $request){
+    public function store(ProductAddRequest $request){
         try {
             $product = $request->all();
 

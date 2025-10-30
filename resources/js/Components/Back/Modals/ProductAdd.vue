@@ -11,42 +11,42 @@
                 </h2>
             </div>
             <div class="w-full flex">
-                <div :class="page == 1 ? 'bg-gray-200' :'' " @click="page = 1;" class=" w-1/6 px-4 py-1 rounded-md hover:bg-gray-100">基本參數</div>
-                <div :class="page == 2 ? 'bg-gray-200' :'' " @click="page = 2;" class=" w-1/6 px-4 py-1 rounded-md hover:bg-gray-100">圖片設定</div>
-                <div :class="page == 3 ? 'bg-gray-200' :'' " @click="page = 3;" class=" w-1/6 px-4 py-1 rounded-md hover:bg-gray-100">材料設定</div>
-                <div :class="page == 4 ? 'bg-gray-200' :'' " @click="page = 4;" class=" w-1/6 px-4 py-1 rounded-md hover:bg-gray-100">產品描述</div>
+                <div :class="page == 1 ? 'bg-gray-200' :'' , header_default_message.page1 == header_danger_message.page1 ? 'text-zinc-900' : 'text-red-400'" @click="page = 1;" class=" w-1/6 px-4 py-1 rounded-md hover:bg-gray-100">{{ header_danger_message.page1 }}</div>
+                <div :class="page == 2 ? 'bg-gray-200' :'' , header_default_message.page2 == header_danger_message.page2 ? 'text-zinc-900' : 'text-red-400'" @click="page = 2;" class=" w-1/6 px-4 py-1 rounded-md hover:bg-gray-100">{{ header_danger_message.page2 }}</div>
+                <div :class="page == 3 ? 'bg-gray-200' :'' , header_default_message.page3 == header_danger_message.page3 ? 'text-zinc-900' : 'text-red-400'" @click="page = 3;" class=" w-1/6 px-4 py-1 rounded-md hover:bg-gray-100">{{ header_danger_message.page3 }}</div>
+                <div :class="page == 4 ? 'bg-gray-200' :'' , header_default_message.page4 == header_danger_message.page4 ? 'text-zinc-900' : 'text-red-400'" @click="page = 4;" class=" w-1/6 px-4 py-1 rounded-md hover:bg-gray-100">{{ header_danger_message.page4 }}</div>
             </div>
             <hr>
         </div>
 
         <!-- page 1 第一頁頁簽 -->
-        <div class="col-span-3 w-full pr-2" v-if="page==1">
+        <div class="col-span-3 w-full pr-2" v-show="page==1">
             <div class="mb-2">
-                <label for="name" class="block text-sm/6 font-semi text-zinc-900">產品名稱 *</label>
+                <label for="name" :class="page1_danger_message.name == page1_default_message.name ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ page1_danger_message.name }}</label>
                 <input id="name" type="text" name="name" autocomplete="given-name"  v-model="page1.name"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
-                <label for="product_code" class="block text-sm/6 font-semi text-zinc-900">產品代碼 *</label>
+                <label for="product_code" :class="page1_danger_message.product_code == page1_default_message.product_code ? 'text-zinc-900' :'text-red-400'"  class="block text-sm/6 font-semi">{{ page1_danger_message.product_code }}</label>
                 <input id="product_code" type="text" name="product_code" autocomplete="given-code"  v-model="page1.product_code"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
-                <label for="price" class="block text-sm/6 font-semi text-zinc-900">售價</label>
-                <input id="price" type="number" name="price" autocomplete="given-price"  v-model="page1.price"
+                <label for="price" :class="page1_danger_message.price == page1_default_message.price ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ page1_danger_message.price }}</label>
+                <input id="price" type="text" name="price" autocomplete="given-price"  v-model="page1.price"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
-                <label for="sort_order" class="block text-sm/6 font-semi text-zinc-900">排列順序 *</label>
+                <label for="sort_order" :class="page1_danger_message.sort_order == page1_default_message.sort_order ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ page1_danger_message.sort_order }}</label>
                 <input id="sort_order" type="number" name="sort_order" autocomplete="given-sort_order"  v-model="page1.sort_order"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             
         </div>
 
-        <div class="col-span-3 w-full pl-2" v-if="page==1">
+        <div class="col-span-3 w-full pl-2" v-show="page==1">
+            <label for="password" :class="page1_danger_message.categories == page1_default_message.categories ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ page1_danger_message.categories }}</label>
             <div class="mb-2" v-for="(catego, idx) in categories" :key="idx">
-                <label for="password" class="block text-sm/6 font-semi text-zinc-900">產品類別</label>
                 <VueSelect
                     v-model="categories[idx]"
                     :options="categories_list"
@@ -63,7 +63,7 @@
         </div>
 
         <!-- page 2 第二頁頁簽 --> 
-        <div class="col-span-6 w-full pr-2 justify-items-center" v-if="page==2">
+        <div class="col-span-6 w-full pr-2 justify-items-center" v-show="page==2">
             <div class="grid grid-cols-6 ">
                 <div class="col-span-1">
                     <imageUpload @uploadSuccess = uploadSuccess :dir="'products'" :id="0"></imageUpload>
@@ -105,49 +105,65 @@
         </div>
         
         <!-- page 3 第三頁頁簽 -->
-        <div class="col-span-6 grid grid-cols-6 w-full pl-2" v-if="page==3">
+        <div class="col-span-6 grid grid-cols-6 w-full pl-2" v-show="page==3">
             <div class = "col-span-2">
                 <div class="flex items center">
-                    <input class="rounded-sm border border-gray-300 w-2/3 h-8 mb-4 " placeholder='分類依據 ex:顏色' v-model="group_name[0]" type="text"></input>
+                    <div class="w-full">
+                        <label :class="page3_danger_message.group_name[0] ? 'text-red-400' : 'text-zinc-900'" class="block text-sm/6 font-semi">{{ page3_danger_message.group_name[0] || page3_default_message.group_name_0 }}</label>
+                        <input class="rounded-sm border border-gray-300 w-2/3 h-8 mb-4 " placeholder='分類依據 ex:顏色' v-model="group_name[0]" type="text"></input>
+                    </div>
                     <button v-if="group_number==1" class="bg-gray-600 h-8 w-1/3 text-white rounded-md px-7 py-1 mr-1 " @click="group_number++" type="text">新增子類別</button>
                 </div>
                 <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="set_number_level1++ ; sets.push({first:set_number_level1,second:null,data:null});set_number_level2.push(0)">+新增群組</button>
                 <div v-for="set in sets" >
                     <div class="w-full" v-if="set.second == null">
                         <div class="block text-sm/6 font-semi text-zinc-900">{{ set.first+1 }}</div>
-                        <label v-if="group_number==1" for ="SetName{{ set.first }}"> 組合顯示名稱/組合售價</label>
-                        <label v-if="group_number==2" for ="SetName{{ set.first }}"> 組合顯示名稱</label>
+                        <div v-if="sets_danger[set.first] && sets_danger[set.first].data" class="text-red-400 text-sm mt-1">{{ sets_danger[set.first].data }}</div>
+                        <div v-if="sets_danger[set.first] && sets_danger[set.first].price" class="text-red-400 text-sm mt-1">{{ sets_danger[set.first].price }}</div>
+
+                        <label v-if="group_number==1" for ="SetName{{ set.first }}" :class="page3_danger_message.set_name ? 'text-red-400' : 'text-zinc-900'">{{ page3_danger_message.set_name || page3_default_message.set_name }}</label>
+                        <label v-if="group_number==2" for ="SetName{{ set.first }}" :class="page3_danger_message.set_name ? 'text-red-400' : 'text-zinc-900'">{{ page3_danger_message.set_name || page3_default_message.set_name }}</label>
 
                         <input id="SetName{{ set.first }}" class="w-2/3 rounded-sm border border-gray-300 h-8" v-model="set.data" type="text"></input>
                         <input v-if="group_number == 1" class="w-1/3 rounded-sm border border-gray-300 h-8" v-model="set.price" type="number"></input>
                         <button :class="now_address[0] == set.first ? 'bg-gray-300':'bg-gray-500'" class="text-white rounded-md px-7 py-1 mr-1" @click="now_address[0] = set.first ; now_address[1]=null; ">選定 </button>
+                        <button class="bg-red-500 text-white rounded-md px-7 py-1 mr-1" @click="removeSet(set.first , null);">刪除</button>
                     </div>
                 </div>
             </div>
 
             <div class = "col-span-2" v-if="group_number == 2">
                 <div class="flex items center">
-                    <input class="rounded-sm border border-gray-300 h-8 mb-4" v-model="group_name[1]" placeholder='分類依據 ex:容量' type="text"></input>
+                    <div class="w-full">
+                        <label :class="page3_danger_message.group_name[1] ? 'text-red-400' : 'text-zinc-900'" class="block text-sm/6 font-semi">{{ page3_danger_message.group_name[1] || page3_default_message.group_name_1 }}</label>
+                        <input class="rounded-sm border border-gray-300 h-8 mb-4" v-model="group_name[1]" placeholder='分類依據 ex:容量' type="text"></input>
+                    </div>
                     <button class="bg-gray-600 h-8 w-1/3 text-white rounded-md px-7 py-1 mr-1 " @click="group_number--" type="text">刪除子類別</button>
                 </div>
                 <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="sets.push({first:now_address[0],second:set_number_level2[now_address[0]],data:null});set_number_level2[now_address[0]]++ ;console.log(set_number_level2,'now_first',now_address[0])">+新增子群組</button>
                 <div v-for="set in sets" >
                     <div class="w-full" v-if="set.first==now_address[0] && set.second!=null">
                         <div class="block text-sm/6 font-semi text-zinc-900">{{ set.first+1 }}-{{ set.second+1 }}</div>
+                        <div v-if="sets_danger[set.first] && sets_danger[set.first].data" class="text-red-400 text-sm mt-1">{{ sets_danger[set.first].data }}</div>
+                        <div v-if="sets_danger[set.first] && sets_danger[set.first].price" class="text-red-400 text-sm mt-1">{{ sets_danger[set.first].price }}</div>
+
                         <label for ="SetName{{ set.first }}{{ set.second }}"> 組合顯示名稱/組合售價</label>
                         <input id="SetName{{ set.first }}{{ set.second }}" class="w-2/3 rounded-sm border border-gray-300 h-8" v-model="set.data" type="text"></input>
                         <input v-if="group_number == 2" class="w-1/3 rounded-sm border border-gray-300 h-8" v-model="set.price" type="number"></input>
                         <button :class="now_address[1] ==  set.second ? 'bg-gray-300':'bg-gray-500'" class="text-white rounded-md px-7 py-1 mr-1" @click=" now_address[1] =  set.second;" >選定</button>
+                        <button class="bg-red-500 text-white rounded-md px-7 py-1 mr-1" @click="removeSet(set.first , set.second);">刪除</button>
                     </div>
                 </div>
             </div>
+            <div class = "col-span-1" v-if="group_number != 2"></div>
 
 
             <div class = "col-span-2" v-if="(group_number==1 && now_address[0] !=null) || (group_number==2 && now_address[1] !=null)">
                 <div class="flex justify-end">
                     <button class="bg-blue-600 text-white rounded-md px-7 py-1 mr-1" @click="set_material.push({first:now_address[0],second:now_address[1],data:null});">+新增材料</button>
+                    <button class="bg-red-500 text-white rounded-md px-7 py-1 mr-1" @click="set_material.pop({first:now_address[0],second:now_address[1]});">-刪除材料</button>
                 </div>
-                <div v-for="set in set_material" >
+                <div v-for="(set, smIdx) in set_material" :key="smIdx">
                     <div class="w-full mb-3" v-if="set.first==now_address[0] && set.second == now_address[1]">
                         <VueSelect
                             v-model="set.data"
@@ -162,7 +178,8 @@
         </div>
 
         <!-- page 4 第四頁頁簽 -->
-        <div class="col-span-6 w-full pr-2" v-if="page==4" >
+        <div class="col-span-6 w-full pr-2" v-show="page==4" >
+            <label :class="page4_danger_message.description ? 'text-red-400' : 'text-zinc-900'" class="block text-sm/6 font-semi">{{ page4_danger_message.description || page4_default_message.description }}</label>
             <Editor v-model:content="description"  />
         </div>
 
@@ -196,7 +213,7 @@ const props = defineProps({
 let page1 = ref({
     name: '',
     product_code: '',
-    price: 0,
+    price: '',
     sort_order: 0,
 });
 
@@ -208,12 +225,15 @@ let now_address = ref([0,null]);
 let group_name = ref(['','']);
 let set_number_level1 = ref(0);
 let set_number_level2 = ref([0]);
+
 let sets  = ref([{
     first: 0,
     second: null,
     data:'',
     price: null,
 }])
+// per-set error messages (indexed by sets' first index)
+let sets_danger = ref([]);
 let image = ref(['','','','','','','','','','','','']);
 let set_material= ref([{
     first: 0,
@@ -221,12 +241,64 @@ let set_material= ref([{
     data:''
 }])
 
+let page1_default_message = ref({
+    name: '產品名稱 *',
+    product_code: '產品代碼 *',
+    price: '產品售價 *',
+    sort_order: '排列順序 *',
+    categories: '產品類別',
+});
+let page1_danger_message = ref({
+    name: '',
+    product_code: '',
+    price: '',
+    sort_order: '',
+    categories: '',
+});
+
+
+let header_default_message = ref({
+    page1: '基本參數',
+    page2: '圖片設定',
+    page3: '材料設定',
+    page4: '產品描述',
+});
+let header_danger_message = ref({
+    page1: '',
+    page2: '',
+    page3: '',
+    page4: '',
+});
+
+// page3 (sets/group) messages
+let page3_default_message = ref({
+    group_name_0: '分類依據 ex:顏色',
+    group_name_1: '分類依據 ex:容量',
+    set_name: '組合顯示名稱/組合售價',
+});
+let page3_danger_message = ref({
+    group_name: ['', ''],
+    set_name: '',
+});
+
+// page4 (description) messages
+let page4_default_message = ref({
+    description: '產品描述',
+});
+let page4_danger_message = ref({
+    description: '',
+});
+
 let group_number = ref(1); 
 const emit = defineEmits(['close'])
 
 onMounted(async () => {
     await getCategoriesList();
     await getMaterialList();
+
+    header_danger_message.value = header_default_message.value;
+    page1_danger_message.value = page1_default_message.value;
+
 });
 
 // 將 option 物件轉成要放入 v-model 的值（只要 id）
@@ -319,57 +391,163 @@ function buildDisplayMaterial(option) {
 
 async function submit() {
 
-    if (group_number.value == 2){
-        set_material.value = set_material.value.filter(item => item.second != null);
-    }
-    let returnData = 
-        await axios.post('/api/back/product',  
-            {
-                product: {
-                    name: page1.value.name,
-                    product_code: page1.value.product_code,
-                    price: page1.value.price,
-                    sort_order: page1.value.sort_order,
-                    description: description.value,
-                },
-                categories: categories.value,
-                images: image.value,
-                set:{
-                    group_number: group_number.value,
-                    group_name: group_name.value,
-                    sets: sets.value,
-                    set_material: set_material.value,
+    page1_danger_message.value = { ...page1_default_message.value };
+    header_danger_message.value = { ...header_default_message.value };
+    sets_danger.value = [];
+
+    const payload = {
+        product: {
+            name: page1.value.name,
+            product_code: page1.value.product_code,
+            price: page1.value.price,
+            sort_order: page1.value.sort_order,
+            description: description.value,
+        },
+        categories: categories.value,
+        images: image.value,
+        set: {
+            group_number: group_number.value,
+            group_name: group_name.value,
+            sets: sets.value,
+            set_material: set_material.value,
+        }
+    };
+
+    try {
+        const returnData = await axios.post('/api/back/product', payload, { headers: { Accept: 'application/json' } });
+
+        if (returnData.data.success) {
+            await Swal.fire({ icon: 'success', title: '新增成功', showConfirmButton: false, timer: 1500 });
+            emit('close');
+            return;
+        }
+
+        console.error(returnData.data.message);
+        await Swal.fire({ icon: 'error', title: '新增失敗', text: returnData.data.message, showConfirmButton: false, timer: 1500 });
+
+    } catch (err) {
+        if (err.response) {
+            const status = err.response.status;
+            const data = err.response.data || {};
+
+            if (status === 422) {
+                const errors = data.errors || {};
+                console.log('Validation errors:', errors);
+                for (const key in errors) {
+                    const msg = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+
+                    if (key.includes('product.name') || key === 'name') {
+                        page1_danger_message.value.name = msg;
+                        header_danger_message.value.page1 = '基本參數 (有欄位未填寫正確)';
+                        continue;
+                    }
+                    if (key.includes('product.product_code') || key === 'product_code') {
+                        page1_danger_message.value.product_code = msg;
+                        header_danger_message.value.page1 = '基本參數 (有欄位未填寫正確)';
+                        continue;
+                    }
+                    if (key.includes('product.price') || key === 'price') {
+                        page1_danger_message.value.price = msg;
+                        header_danger_message.value.page1 = '基本參數 (有欄位未填寫正確)';
+                        continue;
+                    }
+                    if (key.includes('product.sort_order') || key === 'sort_order') {
+                        page1_danger_message.value.sort_order = msg;
+                        header_danger_message.value.page1 = '基本參數 (有欄位未填寫正確)';
+                        continue;
+                    }
+                    if (key.startsWith('categories')) {
+                        page1_danger_message.value.categories = msg;
+                        header_danger_message.value.page1 = '基本參數 (有欄位未填寫正確)';
+                        continue;
+                    }
+
+                    if (key === 'images' || key.startsWith('images')) {
+                        header_danger_message.value.page2 = msg;
+                        continue;
+                    }
+
+                    if (key.includes('product.description') || key === 'description') {
+                        page4_danger_message.description = msg;
+                        header_danger_message.value.page4 = '產品描述 (有欄位錯誤)';
+                        continue;
+                    }
+
+                    if (key.startsWith('set.group_name')) {
+                        const parts = key.split('.');
+                        const idx = parseInt(parts[2] ?? -1);
+                        if (!isNaN(idx) && idx >= 0) {
+                            page3_danger_message.value.group_name[idx] = msg;
+                        } else {
+                            page3_danger_message.value.set_name = msg;
+                        }
+                        header_danger_message.value.page3 = '材料/組合設定 (有欄位錯誤)';
+                        continue;
+                    }
+
+                    let m;
+                    //如果符合 set.sets.數字.price 的格式 順便把它存成m
+                    if ((m = key.match(/^set\.sets\.(\d+)\.price/))) {
+                        console.log('matched set price error:', m);
+                        //m[數字] 主要是在說第幾個set
+                        const idx = parseInt(m[1]);
+                        if (!sets_danger.value[idx]) sets_danger.value[idx] = {};
+                        sets_danger.value[idx].price = msg;
+                        header_danger_message.value.page3 = '材料/組合設定 (有欄位錯誤)';
+                        continue;
+                    }
+
+                    if ((m = key.match(/^set\.sets\.(\d+)\.data/))) {
+                        const idx = parseInt(m[1]);
+                        if (!sets_danger.value[idx]) sets_danger.value[idx] = {};
+                        sets_danger.value[idx].data = msg;
+                        header_danger_message.value.page3 = '材料/組合設定 (有欄位錯誤)';
+                        continue;
+                    }
+
+                    if ((m = key.match(/^set\.set_material\.(\d+)(?:\.(\d+))?\.data/))) {
+                        const idx = parseInt(m[1]);
+                        const matIdx = m[2] !== undefined ? parseInt(m[2]) : null;
+                        if (!sets_danger.value[idx]) sets_danger.value[idx] = {};
+                        sets_danger.value[idx].data = msg;
+
+                        header_danger_message.value.page3 = '材料/組合設定 (有欄位錯誤)';
+                        continue;
+                    }
+
+                    if (key.startsWith('set.sets') || key.startsWith('set.group_number')) {
+                        page3_danger_message.value.set_name = msg;
+                        header_danger_message.value.page3 = '材料/組合設定 (有欄位錯誤)';
+                        continue;
+                    }
                 }
 
+                const messages = Object.values(errors).flat().join('<br>');
+                await Swal.fire({ icon: 'error', title: '請確認資料是否填妥' });
+                return;
             }
-        )
 
-    if (returnData.data.success) {
-        
-        await Swal.fire({
-            icon: 'success',
-            title: '修改成功',
-            showConfirmButton: false,
-            timer: 1500
-        })
-        emit('close')
+            await Swal.fire({ icon: 'error', title: `錯誤 (${status})`});
+            return;
+        }
 
-    } else {
-        console.error(returnData.data.message)
-        await Swal.fire({
-            icon:'error',
-            title:'修改失敗',
-            text: returnData.data.message,
-            showConfirmButton: false,
-            timer: 1500
-        })
+        // network or unknown error
+        console.error(err);
+        await Swal.fire({ icon: 'error', title: '網路錯誤', text: err.message || '未知錯誤' });
     }
-  
+
 }
-
-
 
 function uploadSuccess(returnData){
     image.value[returnData.id] = returnData.imgSrc;
 }
+
+
+
+async function removeSet(first,second){
+    
+    sets.value = sets.value.filter(item => !(item.first == first && item.second == second));
+    set_material.value = set_material.value.filter(item => !(item.first == first && item.second == second));
+} 
+    
 </script>

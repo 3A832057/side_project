@@ -46,9 +46,10 @@ class MaterialControlle extends Controller
         
     }
     //找材料資料表
-    public function getDatatable():array{
+    public function getDatatable(Request $request):array{
 
-        $tableData = $this->materialService->getDatatable();
+        $data = $request->all();
+        $tableData = $this->materialService->getDatatable($data);
         return MaterialResource::collection($tableData)->response()->getData(true);
 
     }

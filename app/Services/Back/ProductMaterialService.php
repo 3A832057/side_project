@@ -16,11 +16,8 @@ class ProductMaterialService
             'name' => $item['name'] ?? '',
             'material_id' => $item['data'] ?? null,
             'sort_order' => $sort_order ?? 0,
-            'created_at' => now(),
-            'updated_at' => now(),
         ];
-        $newMaterial = $setModel->materials()->create($material);
-
+        $newMaterial = Product_material::create($material);
         return [
                 'success' => true, 
                 'message' => '新增成功!',

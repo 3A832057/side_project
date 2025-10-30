@@ -16,20 +16,25 @@ class ProductService
                 ->where('is_hidden', false)
                 ->where(function ($query) use ($serchValue) {
                     foreach ($serchValue as $condition) {
+
                         $field = $condition['field'];
                         $type = $condition['type'];
                         $value = $condition['value'];
+
+                        //如果有要joinTable 例如材料資料表等
                         if (isset($condition['join_table'])) {
-                            $joinTable = $condition['join_table'];
-                            $query->whereHas($joinTable, function ($q) use ($field, $type, $value) {
+                            $query->whereHas($condition['join_table'], function ($q) use ($field, $type, $value) {
                                 if ($type !== 'like') {
                                     $q->where($field, $type, $value);
                                 }
-                                elseif ($type === 'like') {
+                                elseif ($type === 'like') { //如果前端選用like查詢要特別寫%%來做模糊查詢
                                     $q->where($field, 'like', '%' . $value . '%');
                                 }
                             });
-                        } else {
+                        } 
+                        
+                        //如果只是單純主表格欄位查詢
+                        else {
                             if ($type !== 'like') {
                                 $query->where($field, $type, $value);
                             } elseif ($type === 'like') {

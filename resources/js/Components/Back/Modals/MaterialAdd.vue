@@ -15,27 +15,27 @@
         <!-- page 1 第一頁頁簽 -->
         <div class="col-span-6 w-full pr-2">
             <div class="mb-2">
-                <label for="name" class="block text-sm/6 font-semi text-zinc-900">材料名稱 *</label>
+                <label for="name" :class="danger_message.name == defalut_message.name ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ danger_message.name }}</label>
                 <input id="name" type="text" name="name" autocomplete="given-name"  v-model="name"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
-                <label for="material_code" class="block text-sm/6 font-semi text-zinc-900">材料代碼 *</label>
+                <label for="material_code" :class="danger_message.material_code == defalut_message.material_code ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ danger_message.material_code }}</label>
                 <input id="material_code" type="text" name="material_code" autocomplete="given-code"  v-model="material_code"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
-                <label for="cost" class="block text-sm/6 font-semi text-zinc-900">成本價</label>
+                <label for="cost" :class="danger_message.cost == defalut_message.cost ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ danger_message.cost }}</label>
                 <input id="cost" type="number" name="cost" autocomplete="given-cost"  v-model="cost"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
-                <label for="quantity" class="block text-sm/6 font-semi text-zinc-900">數量</label>
+                <label for="quantity" :class="danger_message.quantity == defalut_message.quantity ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ danger_message.quantity }}</label>
                 <input id="quantity" type="number" name="quantity" autocomplete="given-quantity"  v-model="quantity"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
             <div class="mb-2">
-                <label for="low_danger" class="block text-sm/6 font-semi text-zinc-900">最低水位</label>
+                <label for="low_danger" :class="danger_message.low_danger == defalut_message.low_danger ? 'text-zinc-900' :'text-red-400'" class="block text-sm/6 font-semi">{{ danger_message.low_danger }}</label>
                 <input id="low_danger" type="number" name="low_danger" autocomplete="given-low_danger"  v-model="low_danger"
                         class="w-full rounded-sm border border-gray-300 h-8">
             </div>
@@ -72,21 +72,40 @@ let cost = ref(0);
 let low_danger = ref(0);
 let quantity = ref(0);
 
-const emit = defineEmits(['close'])
-
-onMounted(async () => {
+let defalut_message = ref({
+    'name': '材料名稱 *',
+    'material_code': '材料代碼 *',
+    'cost': '成本價格 *',
+    'low_danger': '最低水位 *',
+    'quantity':'數量 *'
+});
+let danger_message = ref({
+    'name': '',
+    'material_code': '',
+    'cost': '',
+    'low_danger': '',
+    'quantity':''
 });
 
 
+const emit = defineEmits(['close'])
+
+onMounted(async () => {
+    danger_message.value = defalut_message.value;
+});
 
 function close() {
     console.log("關閉")
     emit('close')
 }
 
-
-
 async function submit() {
+
+    let isValid = await validate();
+
+    if (!isValid) {
+        return;
+    }
 
     let returnData = 
         await axios.post('/api/back/material/' ,  
@@ -122,7 +141,33 @@ async function submit() {
   
 }
 
+async function validate() {
+    let isValid = true;
+    danger_message.value = { ...defalut_message.value };
 
+    if (!name.value) {
+        danger_message.value.name = '材料名稱 為必填欄位';
+        isValid = false;
+    }
+    if (!material_code.value) {
+        danger_message.value.material_code = '材料代碼 為必填欄位';
+        isValid = false;
+    }
+    if (cost.value <= 0) {
+        danger_message.value.cost = '成本價格 必須大於0';
+        isValid = false;
+    }
+    if (low_danger.value < 0) {
+        danger_message.value.low_danger = '最低水位 不能小於0';
+        isValid = false;
+    }
+    if (quantity.value < 0) {
+        danger_message.value.quantity = '數量 不能小於0';
+        isValid = false;
+    }
+
+    return isValid;
+}
 
 
 </script>
